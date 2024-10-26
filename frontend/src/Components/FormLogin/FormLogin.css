@@ -170,7 +170,7 @@ form .linkTxt{
 
 .wrapper .form-box.login .animation{
     transform: translateX(0);
-    transition: 0.7s ease;
+    transition: 0.5s ease;
     opacity: 1;
     filter: blur(0);
     transition-delay: calc(.1s * var(--j));
@@ -325,4 +325,176 @@ form .linkTxt{
 
 h1{
     color: #fff;
+}
+
+
+/* Media Query para tablets */
+@media (min-width: 601px) and (max-width: 900px) {
+    .wrapper {
+        width: 80%;
+        height: 500px;
+    }
+
+    .form-box {
+        padding: 10px 30px;
+    }
+
+    .info-text {
+        text-align: center;
+        padding: 10px;
+    }
+
+    .info-text h2 {
+        font-size: 28px;
+    }
+
+    .info-text.login{
+        margin-right: 50px;
+        text-align:justify;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .wrapper {
+        width: 90%; 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); 
+        background-color: #ffffff; 
+        margin: 0 auto; 
+        margin-bottom: 90px;
+        margin-top: 150px;
+    }
+
+    .wrapper .form-box.login{
+        text-align: center;
+        padding-right: 0px;
+
+
+        background-color: white;
+    }
+
+    
+    .wrapper .form-box.login .title {
+        color: #ff6f6f !important; 
+    }
+
+    
+    .wrapper .form-box.login .input-box input {
+        color: #ff6f6f !important;
+        border-bottom: 2px solid #ff6f6f !important; 
+    }
+
+   
+    .wrapper .form-box.login .input-box input::placeholder {
+        color: #ff6f6f !important;
+    }
+
+
+    .wrapper .form-box.login .input-box label {
+        color: #ff6f6f !important;
+    }
+
+ 
+    .wrapper .form-box.login .linkTxt p {
+        color: #ff6f6f !important; 
+    }
+
+    .wrapper .form-box.login .linkTxt p a {
+        color: #ff6f6f !important; 
+    }
+
+ 
+    .wrapper .form-box.login button {
+        background-color: #ff5c5c; 
+        border-radius: 25px;
+        padding: 10px;
+        font-size: 18px;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .wrapper .form-box.login button:hover {
+        background-color: #ff6f6f; 
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    }
+
+    .info-text.login{
+        display: none;
+    }
+
+    .rotate-bg{
+        display: none;
+    }
+}
+
+
+@media (max-width: 599px){
+
+
+
+    .form-box.login{
+        padding: 10px !important;
+        padding-right: 20px !important;
+        width: 100%;
+    }
+
+    .wrapper .form-box.login button {
+        background-color: #ff5c5c; 
+        border-radius: 25px;
+        padding: 10px;
+        font-size: 14px;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-box.register{
+
+        padding-left: 30px !important;
+
+        width: 100%;
+
+
+
+    }
+
+    #registrate{
+        color: #ff6f6f !important;
+        margin-left:50px !important;
+
+    
+ 
+    }
+
+    .info-text.register{
+        display: none;
+    }
+
+    .wrapper .form-box.register{
+        pointer-events: none;
+
+    }
+
+    .wrapper.active .form-box.register{
+        display: flexbox;
+        pointer-events: auto;
+    }
+
+    .wrapper .form-box.login{
+        pointer-events: auto;
+    }
+
+    .wrapper.active .form-box.login{
+        pointer-events: none;
+    }
+
+
+
+
+
+
+
+
 }

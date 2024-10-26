@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './estiloform.css';
+import './FormLogin.css';
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
