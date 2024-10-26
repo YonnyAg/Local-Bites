@@ -60,7 +60,7 @@ const Carousel = () => {
 
     return (
         <div className="carousel-container relative w-full">
-            <h2 className="text-2xl font-semibold mb-4">Lo nuevo en PedidosYa</h2>
+            <h2 className="text-2xl font-semibold mb-4">Lo nuevo</h2>
             
             {/* Flechas de navegación */}
             <button onClick={handlePrevClick} className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white rounded-full p-3 shadow-lg hover:bg-gray-800 z-10">
