@@ -4,6 +4,7 @@ import Premises from '../Premises'
 import Contact from '../Contact'
 import Login from '../Login'
 import Navbar from '../../Components/Navbar'
+import Footer from '../../Components/Footer'
 import './App.css'
 
 const AppRoutes = () => {
@@ -22,6 +23,7 @@ function App() {
     <BrowserRouter>
       <Navbar />
       <AppRoutes />
+      <Footer />
     </BrowserRouter>
   )
 }
