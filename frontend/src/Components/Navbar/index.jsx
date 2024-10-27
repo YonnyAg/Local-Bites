@@ -15,7 +15,7 @@ const Navbar = () => {
     ];
 
     return (
-        <header className="fixed top-0 left-0 w-full bg-[#ff6f6f] z-50">
+        <header className="fixed top-0 left-0 w-full bg-[#0404e2] z-50">
             <div className="max-w-[1400px] mx-auto px-5 flex justify-between items-center h-[70px]">
                 <NavLink to="/" className="text-2xl md:text-3xl text-white font-bold no-underline">
                     LocalBites
@@ -57,7 +57,7 @@ const Navbar = () => {
             {/* Navegación desplegable en móvil */}
             <nav
                 className={`
-                    md:hidden bg-[#ff6f6f] overflow-hidden transition-all duration-300
+                    md:hidden bg-[#0e1f53] overflow-hidden transition-all duration-300
                     ${isMenuOpen ? 'max-h-[400px]' : 'max-h-0'}
                 `}
             >
@@ -68,8 +68,8 @@ const Navbar = () => {
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) => `
                             block text-white text-lg font-medium no-underline
-                            py-4 px-5 border-b border-[#ff8f8f]
-                            ${isActive ? 'bg-[#ff8f8f]' : ''}
+                            py-4 px-5 border-b border-[#ffffff]
+                            ${isActive ? 'bg-[#0e1f53]' : ''}
                         `}
                     >
                         {link.text}

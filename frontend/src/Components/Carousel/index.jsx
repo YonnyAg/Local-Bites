@@ -65,7 +65,7 @@ const Carousel = () => {
                                 <h2 className="text-base text-center mt-2 text-black">
                                     {slide.subtitle}
                                 </h2>
-                                <button className="mt-4 w-full py-2 bg-red-400 text-white rounded-lg hover:bg-red-500 transition duration-300">
+                                <button className="mt-4 w-full py-2 bg-[#0404e2] text-white rounded-lg hover:bg-red-500 transition duration-300">
                                     Ver menú
                                 </button>
                             </a>

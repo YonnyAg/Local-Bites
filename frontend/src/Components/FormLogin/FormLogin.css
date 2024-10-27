@@ -8,12 +8,9 @@ body {
     font-family: Arial, sans-serif;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
 :root{
     --white: #fff;
-    --black: #ff6f6f; 
+    --black: #0404e2; 
     --lightBulue: #17a;
 }
 
@@ -112,7 +109,7 @@ body {
     font-size: 16px;
     color: var(--black);
     pointer-events: none;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 
@@ -129,7 +126,7 @@ body {
     right: 0;
     transform: translateY(-50%);
     font-size: 18px;
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .input-box input:focus~i,
@@ -140,7 +137,7 @@ body {
 form button{
     width: 100%;
     height: 45px;
-    background-color: #ff6f6f;
+    background-color: #0404e2;
     color: var(--white);
     border: none;
     outline: none;
@@ -148,7 +145,7 @@ form button{
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
-    transition: .3s;
+    transition: .2s;
 }
 
 form button:hover{
@@ -170,10 +167,10 @@ form .linkTxt{
 
 .wrapper .form-box.login .animation{
     transform: translateX(0);
-    transition: 0.5s ease;
+    transition: 0.3s ease;
     opacity: 1;
     filter: blur(0);
-    transition-delay: calc(.1s * var(--j));
+    transition-delay: calc(.05s * var(--j));
 }
 
 
@@ -181,7 +178,7 @@ form .linkTxt{
     transform: translateX(-120%);
     opacity: 0;
     filter: blur(10px);
-    transition-delay: calc(.1s * var(--i));
+    transition-delay: calc(.05s * var(--i));
 }
 
 .wrapper .info-text{
@@ -218,15 +215,15 @@ form .linkTxt{
     transform: translateX(0);
     opacity: 1;
     filter: blur(0);
-    transition: 0.7s ease;
-    transition-delay: calc(.1s * var(--j));
+    transition: 0.3s ease;
+    transition-delay: calc(.05s * var(--j));
 }
 .wrapper.active .info-text.login .animation{
     transform: translateX(120px);
     opacity: 0;
     filter: blur(10px);
-    transition: 0.7s ease;
-    transition-delay: calc(.1s * var(--i));
+    transition: 0.3s ease;
+    transition-delay: calc(.05s * var(--i));
 }
 
 .wrapper .rotate-bg{
@@ -235,16 +232,16 @@ form .linkTxt{
     right: 0;
     width: 850px;
     height: 600px;
-    background: #ff6f6f;
+    background: #0404e2;
     transform: rotate(10deg) skewY(40deg);
     transform-origin: bottom right;
-    transition: 1.5s ease;
-    transition-delay: 1.6s;
+    transition: 1s ease;
+    transition-delay: 0.3s;
 }
 
 .wrapper.active .rotate-bg{
     transform: rotate(0) skewY(0);
-    transition-delay: 0.5s;
+    transition-delay: 0.2s;
 }
 
 .wrapper .form-box.register{
@@ -260,15 +257,15 @@ form .linkTxt{
     transform: translateX(120%);
     opacity: 0;
     filter: blur(10px);
-    transition: .7s ease;
-    transition-delay: calc(.1s * var(--j));
+    transition: 0.3s ease;
+    transition-delay: calc(.05s * var(--j));
 }
 
 .wrapper.active .form-box.register .animation{
     transform: translateX(0);
     opacity: 1;
     filter: blur(0);
-    transition-delay: calc(.1s * var(--i));
+    transition-delay: calc(.05s * var(--i));
 }
 
 .wrapper .info-text.register{
@@ -287,15 +284,15 @@ form .linkTxt{
     transform: translateX(-120%);
     opacity: 0;
     filter: blur(10px);
-    transition: .7s ease;
-    transition-delay: calc(.1s * var(--j));
+    transition: 0.3s ease;
+    transition-delay: calc(.01s * var(--j));
 }
 
 .wrapper.active .info-text.register .animation{
     transform: translateX(0);
     opacity: 1;
     filter: blur(0);
-    transition-delay: calc(.1s * var(--i));
+    transition-delay: calc(.05s * var(--i));
 }
 
 .wrapper .rotate-bg2{
@@ -308,12 +305,12 @@ form .linkTxt{
     transform: rotate(0) skewY(0);
     transform-origin: bottom left;
     transition: 1.5s ease;
-    transition-delay: 0.5s;
+    transition-delay: 0.2s;
 }
 
 .wrapper.active .rotate-bg2{
     transform: rotate(-11deg) skewY(-40deg);
-    transition-delay: 1.2s;
+    transition-delay: 0.2s;
 }
 
 .main-content {
@@ -378,37 +375,37 @@ h1{
 
     
     .wrapper .form-box.login .title {
-        color: #ff6f6f !important; 
+        color: #0404e2 !important; 
     }
 
     
     .wrapper .form-box.login .input-box input {
-        color: #ff6f6f !important;
-        border-bottom: 2px solid #ff6f6f !important; 
+        color: #0404e2 !important;
+        border-bottom: 2px solid #0e1f53 !important; 
     }
 
    
     .wrapper .form-box.login .input-box input::placeholder {
-        color: #ff6f6f !important;
+        color: #0404e2 !important;
     }
 
 
     .wrapper .form-box.login .input-box label {
-        color: #ff6f6f !important;
+        color: #0404e2 !important;
     }
 
  
     .wrapper .form-box.login .linkTxt p {
-        color: #ff6f6f !important; 
+        color: #0404e2 !important; 
     }
 
     .wrapper .form-box.login .linkTxt p a {
-        color: #ff6f6f !important; 
+        color: #0404e2 !important; 
     }
 
  
     .wrapper .form-box.login button {
-        background-color: #ff5c5c; 
+        background-color: #0404e2; 
         border-radius: 25px;
         padding: 10px;
         font-size: 18px;
@@ -417,7 +414,7 @@ h1{
     }
 
     .wrapper .form-box.login button:hover {
-        background-color: #ff6f6f; 
+        background-color: #0404e2; 
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
     }
 
@@ -442,7 +439,7 @@ h1{
     }
 
     .wrapper .form-box.login button {
-        background-color: #ff5c5c; 
+        background-color: #0404e2; 
         border-radius: 25px;
         padding: 10px;
         font-size: 14px;
@@ -461,7 +458,7 @@ h1{
     }
 
     #registrate{
-        color: #ff6f6f !important;
+        color: #0404e2 !important;
         margin-left:50px !important;
 
     
