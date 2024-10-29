@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 import SuccessNotification from './SuccessNotification';
+import ErrorNotification from './ErrorNotification';
+import Loader from '../Loaders/LoaderLogin';
 import './FormLogin.css';
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
   };
 
-  // Función para ir al formulario de inicio de sesión
   const goToLogin = () => {
     setIsLogin(true);
-    setShowSuccess(false); // Cierra la ventana de éxito
+    setShowSuccess(false);
   };
 
   const handleRegister = async (event) => {
     event.preventDefault();
-
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8000/api/register/', {
         method: 'POST',
@@ -37,24 +44,77 @@ const LoginRegister = () => {
       });
 
       if (response.ok) {
-        // Si el registro es exitoso
         setShowSuccess(true);
         setUsername('');
         setEmail('');
         setPassword('');
         setError(null);
       } else {
-        // Si hay un error, obtén el mensaje del backend
         const data = await response.json();
         setError(data.error || 'Error al registrar el usuario');
+        setShowError(true);
       }
     } catch (error) {
       setError('Error al conectar con el servidor');
+      setShowError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('accessToken', data.access);
+        localStorage.setItem('refreshToken', data.refresh);
+        setUsername('');
+        setPassword('');
+        setError(null);
+        setShowError(false);
+
+        login();
+        setTimeout(() => {
+          setIsLoading(false);
+          navigate('/');
+        }, 2000);
+      } else {
+        const data = await response.json();
+        setError(data.detail || 'Error al iniciar sesión');
+        setShowError(true);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setError('Error al conectar con el servidor');
+      setShowError(true);
+      setIsLoading(false);
+    }
+  };
+
+  // Efecto para ocultar automáticamente el mensaje de error después de 3 segundos con animación de salida
+  useEffect(() => {
+    if (showError) {
+      const timer = setTimeout(() => setShowError(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showError]);
+
   return (
-    <div className='Box-login-css'>
+    <div className="Box-login-css">
+      {isLoading && <Loader />}
+      <SuccessNotification visible={showSuccess} onClose={() => setShowSuccess(false)} goToLogin={goToLogin} />
+      <ErrorNotification visible={showError} onClose={() => setShowError(false)} />
+
       <div className={`wrapper ${!isLogin ? 'active' : ''}`}>
         <span className="rotate-bg"></span>
         <span className="rotate-bg2"></span>
@@ -64,14 +124,24 @@ const LoginRegister = () => {
           <h1 className="title animation" style={{ color: '#000', '--i': 0, '--j': 21 }}>
             Iniciar Sesión
           </h1>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="input-box animation" style={{ '--i': 1, '--j': 22 }}>
-              <input type="text" required />
-              <label>Nombre de Usuario</label>
+              <input
+                type="email"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <label>Correo electrónico</label>
               <i className="bx bxs-user"></i>
             </div>
             <div className="input-box animation" style={{ '--i': 2, '--j': 23 }}>
-              <input type="password" required />
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <label>Contraseña</label>
               <i className="bx bxs-lock-alt"></i>
             </div>
@@ -138,7 +208,6 @@ const LoginRegister = () => {
             <button type="submit" className="btn animation" style={{ '--i': 21, '--j': 4 }}>
               Registrarme
             </button>
-            {error && <p className="text-red-500 mt-2">{error}</p>}
             <div className="linkTxt animation" style={{ '--i': 22, '--j': 5 }}>
               <p>
                 ¿Ya tienes una cuenta?{' '}
@@ -160,9 +229,6 @@ const LoginRegister = () => {
           </p>
         </div>
       </div>
-
-      {/* Notificación de Éxito */}
-      <SuccessNotification visible={showSuccess} onClose={() => setShowSuccess(false)}  goToLogin={goToLogin} />
     </div>
   );
 };
