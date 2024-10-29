@@ -1,9 +1,9 @@
 import Layout  from "../../Components/Layout"
-
+import Contact from "../../Components/FormContact"
 function contact() {
     return (
         <Layout>
-            <h1>Contacto</h1>
+            <Contact />
         </Layout>
     )
 }
