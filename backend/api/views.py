@@ -17,7 +17,8 @@ def register_user(request):
 
     # Crear el usuario
     user = User.objects.create(
-        username=username,
+        username=email,
+        first_name=username,
         password=make_password(password),  # Hashea la contraseña
         email=email
     )
