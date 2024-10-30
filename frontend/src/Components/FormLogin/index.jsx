@@ -20,18 +20,26 @@ const LoginRegister = () => {
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
+    // Limpia los campos de entrada cada vez que se cambia el formulario
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setError(null); // Opcional: limpiar cualquier mensaje de error
   };
 
   const goToLogin = () => {
     setIsLogin(true);
     setShowSuccess(false);
+    setUsername('');
+    setEmail('');
+    setPassword('');
   };
 
   const handleRegister = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch('http://192.168.4.22:8000/api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +74,7 @@ const LoginRegister = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/token/', {
+      const response = await fetch('http://192.168.4.22:8000/api/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
