@@ -43,8 +43,8 @@ const SliderComponent = () => {
   }, []);
 
   return (
-    <div ref={sliderRef} className="slider">
-      <div className="slide-track">
+    <div ref={sliderRef} className="slider-filter-css">
+      <div className="slide-track-filter-css">
         {[...slideData, ...slideData].map((slide, index) => (
           <div key={index} className="slide">
             <a href={slide.link} className="sushi-button" target="_parent">

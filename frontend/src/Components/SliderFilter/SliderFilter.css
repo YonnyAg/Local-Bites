@@ -1,27 +1,3 @@
-/* Estilos generales para hacer la página más amigable con el diseño responsivo */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    width: 100%;
-}
-
 /* Botón de imagen circular (ahora es un enlace) */
 .sushi-button {
     position: relative;
@@ -96,7 +72,7 @@ body {
 }
 
 /* Slider infinito */
-.slider {
+.slider-filter-css {
     width: 100%;
     height: auto;
     margin: auto;
@@ -106,7 +82,7 @@ body {
     
 }
 
-.slider .slide-track {
+.slider-filter-css .slide-track-filter-css {
     display: flex;
     gap: 50px; /* Un poco más juntos */
     animation: scroll 25s linear infinite; /* Más lento */
@@ -114,12 +90,12 @@ body {
 }
 
 
-.slider .slide {
+.slider-filter-css .slide {
     width: calc(75vw / 5); /* Mostrar 5 imágenes en pantalla */
     flex-shrink: 0;
 }
 
-.slider .slide img {
+.slider-filter-css .slide img {
     width: 100%;
 }
 
