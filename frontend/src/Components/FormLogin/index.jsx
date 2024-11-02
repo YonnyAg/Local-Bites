@@ -52,7 +52,7 @@ const LoginRegister = () => {
     }
     setIsLoading(true);
     try {
-      const response = await fetch('http://192.168.4.22:8000/api/register/', {
+      const response = await fetch('http://127.0.0.1:8000 /api/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const LoginRegister = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('http://192.168.4.22:8000/api/token/', {
+      const response = await fetch('http://127.0.0.1:8000/api/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
