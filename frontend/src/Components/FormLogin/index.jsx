@@ -20,11 +20,10 @@ const LoginRegister = () => {
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
-    // Limpia los campos de entrada cada vez que se cambia el formulario
     setUsername('');
     setEmail('');
     setPassword('');
-    setError(null); // Opcional: limpiar cualquier mensaje de error
+    setError(null);
   };
 
   const goToLogin = () => {
@@ -35,8 +34,22 @@ const LoginRegister = () => {
     setPassword('');
   };
 
+  const validateEmail = (email) => {
+    return /^[\w-\.]+@gmail\.(com|cl)$/.test(email);
+  };
+
   const handleRegister = async (event) => {
     event.preventDefault();
+    if (!validateEmail(email)) {
+      setError('Correo inválido. Debe ser @gmail.com o @gmail.cl');
+      setShowError(true);
+      return;
+    }
+    if (password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres.');
+      setShowError(true);
+      return;
+    }
     setIsLoading(true);
     try {
       const response = await fetch('http://192.168.4.22:8000/api/register/', {
@@ -109,7 +122,6 @@ const LoginRegister = () => {
     }
   };
 
-  // Efecto para ocultar automáticamente el mensaje de error después de 3 segundos con animación de salida
   useEffect(() => {
     if (showError) {
       const timer = setTimeout(() => setShowError(false), 3000);
@@ -139,6 +151,7 @@ const LoginRegister = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder="Correo electrónico (solo @gmail.com o @gmail.cl)"
               />
               <label>Correo electrónico</label>
               <i className="bx bxs-user"></i>
@@ -149,6 +162,7 @@ const LoginRegister = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña (mínimo 8 caracteres)"
               />
               <label>Contraseña</label>
               <i className="bx bxs-lock-alt"></i>
@@ -189,6 +203,7 @@ const LoginRegister = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder="Nombre de Usuario"
               />
               <label>Nombre de Usuario</label>
               <i className="bx bxs-user"></i>
@@ -199,6 +214,7 @@ const LoginRegister = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Correo electrónico (solo @gmail.com o @gmail.cl)"
               />
               <label>Email</label>
               <i className="bx bxs-envelope"></i>
@@ -209,6 +225,7 @@ const LoginRegister = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña (mínimo 8 caracteres)"
               />
               <label>Contraseña</label>
               <i className="bx bxs-lock-alt"></i>

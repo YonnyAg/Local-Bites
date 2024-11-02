@@ -1,9 +1,10 @@
 import Layout  from "../../Components/Layout"
+import SliderComponent from "../../Components/SliderFilter"
 
 function premises() {
     return (
         <Layout>
-            <h1>Locales</h1>
+            <SliderComponent />
         </Layout>
     )
 }

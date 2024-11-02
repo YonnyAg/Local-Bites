@@ -1,0 +1,136 @@
+/* Estilos generales para hacer la página más amigable con el diseño responsivo */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Botón de imagen circular (ahora es un enlace) */
+.sushi-button {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+/* Imagen dentro del botón */
+.sushi-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Texto sobre la imagen */
+.sushi-button .text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sushi-button:hover img {
+    transform: scale(1.1);
+    filter: blur(2px);
+}
+
+/* El texto se mostrará al pasar el mouse sobre la imagen */
+.sushi-button:hover .text-overlay {
+    opacity: 1;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .sushi-button {
+        width: 150px;
+        height: 150px;
+    }
+
+    .sushi-button .text-overlay {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sushi-button {
+        width: 100px;
+        height: 100px;
+    }
+
+    .sushi-button .text-overlay {
+        font-size: 16px;
+    }
+}
+
+/* Slider infinito */
+.slider {
+    width: 100%;
+    height: auto;
+    margin: auto;
+    overflow: hidden;
+    margin-top: 100px !important;
+    
+    
+}
+
+.slider .slide-track {
+    display: flex;
+    gap: 50px; /* Un poco más juntos */
+    animation: scroll 25s linear infinite; /* Más lento */
+    -webkit-animation: scroll 25s linear infinite;
+}
+
+
+.slider .slide {
+    width: calc(75vw / 5); /* Mostrar 5 imágenes en pantalla */
+    flex-shrink: 0;
+}
+
+.slider .slide img {
+    width: 100%;
+}
+
+/* Animación de slider */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-75vw)); /* Rotar 5 imágenes a la vez */
+        -webkit-transform: translateX(calc(-75vw));
+    }
+}
