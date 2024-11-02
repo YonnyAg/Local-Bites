@@ -6,23 +6,26 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import tonizzia from '../../assets/CarouselHome/logo_tonizzia.jpg';
+import cafeteria from '../../assets/CarouselHome/logo_cafeteria.jpg';
+import toro_rios from '../../assets/CarouselHome/logo_toro_rios.png';
 
 const Carousel = () => {
     const slides = [
         {
-            img: '/imagenes/logo tonizzia.jpg',
+            img: tonizzia,
             title: 'Tonizzia',
             subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
             link: 'tonizzia.html',
         },
         {
-            img: '/imagenes/logo cafeteria.jpg',
+            img: cafeteria,
             title: 'Cafetería Pentukun',
             subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
             link: '#',
         },
         {
-            img: '/imagenes/logo toro de los rios.png',
+            img: toro_rios,
             title: 'Toro de los rios',
             subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
             link: 'restaurant1.html',
@@ -52,7 +55,7 @@ const Carousel = () => {
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={index}>
-                        <div className="bg-white rounded-lg p-5 shadow-md border hover:border-red-400 transition duration-300">
+                        <div className="bg-white rounded-lg p-5 shadow-md border hover:border-[#FFC600] transition duration-300">
                             <a href={slide.link} className="block">
                                 <img
                                     src={slide.img}
@@ -65,7 +68,7 @@ const Carousel = () => {
                                 <h2 className="text-base text-center mt-2 text-black">
                                     {slide.subtitle}
                                 </h2>
-                                <button className="mt-4 w-full py-2 bg-[#0404e2] text-white rounded-lg hover:bg-red-500 transition duration-300">
+                                <button className="mt-4 w-full py-2 bg-[#FFC600] text-white rounded-lg hover:bg-[#FFC34A] transition duration-300">
                                     Ver menú
                                 </button>
                             </a>
