@@ -3,6 +3,9 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import requests
+from django.http import JsonResponse
+from django.conf import settings
 
 @api_view(['POST'])
 def register_user(request):
@@ -25,3 +28,13 @@ def register_user(request):
 
     # Retornar una respuesta exitosa
     return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+
+def google_reviews(request):
+    place_id = 'ChIJncZ1Tje7FZYRtTyj9qy2_TQ'  # Reemplaza con el ID del lugar deseado
+    api_key = "AIzaSyDL-y7dKo4sHj0tzqTcJ7P2Hdp9UlLZ6Ao"
+    url = f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews&language=es&key={api_key}'
+
+    response = requests.get(url)
+    data = response.json()
+    return JsonResponse(data)
+
