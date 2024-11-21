@@ -1,56 +1,57 @@
-import React from 'react';
-import { PhoneIcon, EnvelopeIcon, InformationCircleIcon, StarIcon, UserGroupIcon } from '@heroicons/react/24/solid';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  PhoneIcon,
+  EnvelopeIcon,
+  InformationCircleIcon,
+  StarIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/solid';
 import GoogleMapComponent from './GoogleMap';
-import ReviewSection from './ReviewSection'; // Importamos el componente de reseñas
+import ReviewSection from './ReviewSection';
 import sushiImage from '../../assets/slider/categoria_sushi.png';
 
-const categories = [
-  {
-    title: 'Sushi',
-    items: [
-      { name: 'Yu Sushi', description: 'Delicious sushi rolls', image: sushiImage },
-      { name: 'Sushi Master', description: 'Traditional sushi', image: sushiImage },
-    ],
-  },
-  {
-    title: 'Sandwiches',
-    items: [
-      { name: 'Big Burger', description: 'Juicy sandwiches', image: sushiImage },
-    ],
-  },
-];
-
 const ProfilePage = () => {
-  const restaurantInfo = {
-    name: 'Yu Sushi',
-    description: 'Authentic sushi place with a variety of rolls and sashimi. Our restaurant is dedicated to providing an authentic sushi experience using fresh, high-quality ingredients. We are proud to offer a family-friendly atmosphere, ideal for gatherings and celebrations.',
-    specialties: 'Sushi rolls, sashimi, and traditional Japanese dishes',
-    targetAudience: 'Family-friendly environment, perfect for friends and family gatherings',
-    location: 'Restaurant Tonizzia - Los Carreras, 5150000 San José de Mariquina, Mariquina, Los Ríos',
-    phone: '+56 9 1234 5678',
-    email: 'contact@yusushi.com',
-    whatsapp: 'https://wa.me/56912345678',
-    menuUrl: 'https://menu-link.com',
-  };
+  const { id } = useParams(); // Obtiene el ID del restaurante desde la URL
+  const [restaurantInfo, setRestaurantInfo] = useState(null);
+
+  // Llama a la API para obtener los datos del restaurante
+  useEffect(() => {
+    const fetchRestaurantData = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/api/restaurante/${id}/`); // Cambia la URL según tu backend
+        const data = await response.json();
+        setRestaurantInfo(data);
+      } catch (error) {
+        console.error('Error fetching restaurant data:', error);
+      }
+    };
+
+    fetchRestaurantData();
+  }, [id]);
+
+  if (!restaurantInfo) {
+    return <p>Cargando perfil del restaurante...</p>;
+  }
 
   return (
     <div className="relative w-full">
-      {/* Banner con la imagen del restaurante y nombre en el centro con borde y sombra */}
+      {/* Banner */}
       <div className="relative w-full h-80 mb-8 overflow-hidden border border-black shadow-lg rounded-md">
-        <img src={sushiImage} alt={restaurantInfo.name} className="w-full h-full object-cover" />
+        <img src={restaurantInfo.image || sushiImage} alt={restaurantInfo.name} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <h1 className="text-4xl font-bold text-white">{restaurantInfo.name}</h1>
         </div>
       </div>
 
-      {/* Contenedor principal con columnas */}
+      {/* Contenedor principal */}
       <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
-        {/* Mapa en el lado izquierdo ocupando 40% del ancho en pantallas grandes */}
+        {/* Mapa */}
         <div className="w-full lg:w-2/5 shadow-lg rounded-md overflow-hidden">
           <GoogleMapComponent location={restaurantInfo.location} className="h-full w-full" />
         </div>
 
-        {/* Información del restaurante en el lado derecho ocupando 60% del ancho en pantallas grandes */}
+        {/* Información del restaurante */}
         <div className="w-full lg:w-3/5 p-6 bg-white shadow-lg rounded-md transition duration-300 transform hover:bg-gray-100 hover:shadow-2xl">
           <h2 className="text-2xl font-semibold mb-4 flex items-center">
             <InformationCircleIcon className="h-6 w-6 text-blue-500 mr-2" />
@@ -88,7 +89,12 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-6 text-center">
-            <a href={restaurantInfo.menuUrl} target="_blank" rel="noopener noreferrer" className="inline-block bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 shadow-lg">
+            <a
+              href={restaurantInfo.menuUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-300 shadow-lg"
+            >
               View Menu
             </a>
           </div>
@@ -96,7 +102,7 @@ const ProfilePage = () => {
       </div>
 
       <div className="mt-8 max-w-4xl mx-auto px-4">
-        {categories.map((category, index) => (
+        {restaurantInfo.categories?.map((category, index) => (
           <div key={index} className="mb-6">
             <h3 className="text-2xl font-semibold mb-4">{category.title}</h3>
             <div className="flex overflow-x-scroll space-x-4">
@@ -112,10 +118,10 @@ const ProfilePage = () => {
         ))}
       </div>
 
-      {/* Sección de Opiniones de Google */}
+      {/* Sección de Opiniones */}
       <ReviewSection />
 
-      {/* Botón flotante de WhatsApp en la esquina inferior derecha */}
+      {/* Botón flotante de WhatsApp */}
       <a
         href={restaurantInfo.whatsapp}
         target="_blank"

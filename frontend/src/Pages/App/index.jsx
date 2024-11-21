@@ -17,8 +17,7 @@ const AppRoutes = () => {
     { path: '/locales', element: <Premises /> },
     { path: '/contacto', element: <Contact /> },
     { path: '/login', element: <Login /> },
-    { path: '/restaurante', element: <ProfileRestaurant /> },
-
+    { path: '/restaurante/:id', element: <ProfileRestaurant /> },
   ]);
 
   return routes;

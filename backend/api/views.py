@@ -46,4 +46,13 @@ class RestauranteListView(APIView):
         restaurantes = Restaurante.objects.all()
         serializer = RestauranteSerializer(restaurantes, many=True)
         return Response(serializer.data)
+    
+class RestauranteDetail(APIView):
+    def get(self, request, id):
+        try:
+            restaurante = Restaurante.objects.get(id=id)
+            serializer = RestauranteSerializer(restaurante)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Restaurante.DoesNotExist:
+            return Response({"error": "Restaurante no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
