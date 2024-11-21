@@ -151,7 +151,6 @@ const LoginRegister = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Correo electrónico (solo @gmail.com o @gmail.cl)"
               />
               <label>Correo electrónico</label>
               <i className="bx bxs-user"></i>
@@ -162,7 +161,6 @@ const LoginRegister = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contraseña (mínimo 8 caracteres)"
               />
               <label>Contraseña</label>
               <i className="bx bxs-lock-alt"></i>
@@ -184,7 +182,7 @@ const LoginRegister = () => {
         {/* Información de "Bienvenido" */}
         <div className="info-text login">
           <h1 className="animation" style={{ '--i': 0, '--j': 20 }}>
-            ¡Bienvenido!
+            ¡Bienvenido/a!
           </h1>
           <p className="animation" style={{ '--i': 1, '--j': 21 }}>
             Inicia Sesión o Regístrate para obtener descuentos con la aplicación.
@@ -203,7 +201,6 @@ const LoginRegister = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Nombre de Usuario"
               />
               <label>Nombre de Usuario</label>
               <i className="bx bxs-user"></i>
@@ -214,7 +211,6 @@ const LoginRegister = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Correo electrónico (solo @gmail.com o @gmail.cl)"
               />
               <label>Email</label>
               <i className="bx bxs-envelope"></i>
@@ -225,7 +221,6 @@ const LoginRegister = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contraseña (mínimo 8 caracteres)"
               />
               <label>Contraseña</label>
               <i className="bx bxs-lock-alt"></i>
@@ -247,7 +242,7 @@ const LoginRegister = () => {
         {/* Información de "Bienvenido Nuevamente" */}
         <div className="info-text register">
           <h1 className="animation" style={{ '--i': 17, '--j': 0 }}>
-            Bienvenido Nuevamente
+            Bienvenido/a Nuevamente
           </h1>
           <p className="animation" style={{ '--i': 18, '--j': 1 }}>
             Al continuar, aceptas nuestros términos de uso y política de privacidad.

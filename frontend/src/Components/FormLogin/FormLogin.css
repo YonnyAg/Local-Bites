@@ -20,6 +20,8 @@ body {
     animation: scaleUp 0.5s ease-in-out;
     position: relative;
   }
+
+  
   
   /* Botón de cierre (X) en la esquina superior derecha */
   button[aria-label="Cerrar"] {
@@ -53,8 +55,8 @@ body {
 
 :root{
     --white: #fff;
-    --black: #0404e2; 
-    --lightBulue: #17a;
+    --black: #FFC34A; 
+    --lightBulue: #ebc67c;
 }
 
 *{
@@ -128,7 +130,7 @@ body {
     width: 100%;
     height: 100%;
     background: transparent;
-    color: var(--black);
+    color: #000000;
     font-size: 16px;
     font-weight: 500;
     border: none;
@@ -177,8 +179,8 @@ body {
 form button{
     width: 100%;
     height: 45px;
-    background-color: #0404e2;
-    color: var(--white);
+    background-color: #FFC34A;
+    color: #000000;
     border: none;
     outline: none;
     border-radius: 40px;
@@ -200,13 +202,14 @@ form .linkTxt{
 }
 
 .linkTxt p a{
-    color: blue;
+    color: #FFC600;
     text-decoration: none;
     font-weight: 600;
 }
 
 .wrapper .form-box.login .animation{
     transform: translateX(0);
+    color: #000000;
     transition: 0.3s ease;
     opacity: 1;
     filter: blur(0);
@@ -215,13 +218,16 @@ form .linkTxt{
 
 .wrapper.active .form-box.login .animation{
     transform: translateX(-120%);
+    color: #000000;
     opacity: 0;
     filter: blur(10px);
     transition-delay: calc(.05s * var(--i));
 }
 
+
 .wrapper .info-text{
     position: absolute;
+    color: #000000;
     top: 0;
     width: 50%;
     height: 100%;
@@ -238,14 +244,14 @@ form .linkTxt{
 
 .wrapper .info-text h2{
     font-size: 36px;
-    color: var(--white);
+    color: #000000;
     line-height: 1.3;
     text-transform: uppercase;
 }
 
 .wrapper .info-text p{
     font-size: 16px;
-    color: var(--white);
+    color: #000000
 }
 
 .wrapper .info-text.login .animation{
@@ -269,7 +275,7 @@ form .linkTxt{
     right: 0;
     width: 850px;
     height: 600px;
-    background: #0404e2;
+    background: #FFC600;
     transform: rotate(10deg) skewY(40deg);
     transform-origin: bottom right;
     transition: 1s ease;
@@ -379,9 +385,9 @@ h1{
         font-size: 28px;
     }
 
-    .info-text.login{
+    .info-text.login {
         margin-right: 50px;
-        text-align:justify;
+        text-align: justify;
     }
 }
 
@@ -397,105 +403,104 @@ h1{
         margin-top: 150px;
     }
 
-    .wrapper .form-box.login{
+    .wrapper .form-box.login {
         text-align: center;
         padding-right: 0px;
         background-color: white;
     }
-    
+
     .wrapper .form-box.login .title {
-        color: #0404e2 !important; 
+        color: #FFC600 !important; 
     }
-    
+
     .wrapper .form-box.login .input-box input {
-        color: #0404e2 !important;
-        border-bottom: 2px solid #0e1f53 !important; 
+        color: #000000 !important;
+        border-bottom: 2px solid #FFC600 !important; 
     }
-   
+
     .wrapper .form-box.login .input-box input::placeholder {
-        color: #0404e2 !important;
+        color: #FFC600 !important;
     }
 
     .wrapper .form-box.login .input-box label {
-        color: #0404e2 !important;
+        color: #FFC600 !important;
     }
 
     .wrapper .form-box.login .linkTxt p {
-        color: #0404e2 !important; 
+        color: #000000 !important; 
     }
 
     .wrapper .form-box.login .linkTxt p a {
-        color: #0404e2 !important; 
+        color: #FFC600 !important; 
     }
 
     .wrapper .form-box.login button {
-        background-color: #0404e2; 
+        background-color: #FFC600; 
         border-radius: 25px;
         padding: 10px;
         font-size: 18px;
-        color: white;
+        color: #000000;
         transition: background-color 0.3s ease;
     }
 
     .wrapper .form-box.login button:hover {
-        background-color: #0404e2; 
+        background-color: #FFC600; 
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
     }
 
-    .info-text.login{
+    .info-text.login {
         display: none;
     }
 
-    .rotate-bg{
+    .rotate-bg {
         display: none;
     }
 }
 
-@media (max-width: 599px){
-    .form-box.login{
+@media (max-width: 599px) {
+    .form-box.login {
         padding: 10px !important;
         padding-right: 20px !important;
         width: 100%;
     }
 
     .wrapper .form-box.login button {
-        background-color: #0404e2; 
+        background-color: #FFC600; 
         border-radius: 25px;
         padding: 10px;
         font-size: 14px;
-        color: white;
+        color: #000000;
         transition: background-color 0.3s ease;
     }
 
-    .form-box.register{
+    .form-box.register {
         padding-left: 30px !important;
         width: 100%;
     }
 
-    #registrate{
-        color: #0404e2 !important;
-        margin-left:50px !important;
+    #registrate {
+        color: #FFC600 !important;
+        margin-left: 50px !important;
     }
 
-    .info-text.register{
+    .info-text.register {
         display: none;
     }
 
-    .wrapper .form-box.register{
+    .wrapper .form-box.register {
         pointer-events: none;
-
     }
 
-    .wrapper.active .form-box.register{
+    .wrapper.active .form-box.register {
         display: flexbox;
         pointer-events: auto;
     }
 
-    .wrapper .form-box.login{
+    .wrapper .form-box.login {
         pointer-events: auto;
     }
 
-    .wrapper.active .form-box.login{
+    .wrapper.active .form-box.login {
         pointer-events: none;
     }
 }
