@@ -1,4 +1,3 @@
-// SliderComponent.jsx
 import React, { useEffect, useRef } from 'react';
 import './SliderFilter.css';
 import categoriaSushi from '../../assets/slider/categoria_sushi.png';
@@ -26,19 +25,19 @@ const SliderComponent = () => {
 
   useEffect(() => {
     const slider = sliderRef.current;
-    let scrollAmount = 0;
 
-    const scrollSlider = () => {
-      scrollAmount += 1;
-      if (scrollAmount >= slider.scrollWidth / 2) {
-        scrollAmount = 0;
+    // Configurar desplazamiento infinito
+    const startInfiniteScroll = () => {
+      if (slider.scrollLeft >= slider.scrollWidth / 2) {
+        slider.scrollLeft = 0; // Reinicia el scroll cuando llega al final
+      } else {
+        slider.scrollLeft += 1; // Incrementa el desplazamiento
       }
-      slider.scrollLeft = scrollAmount;
     };
 
-    const intervalId = setInterval(scrollSlider, 20);
+    const intervalId = setInterval(startInfiniteScroll, 20);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId); // Limpia el intervalo al desmontar el componente
   }, []);
 
   const handleCategoryClick = (categoria) => {
