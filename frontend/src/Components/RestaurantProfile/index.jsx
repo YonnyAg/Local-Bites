@@ -48,32 +48,40 @@ const ProfilePage = () => {
       <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
         {/* Mapa */}
         <div className="w-full lg:w-2/5 shadow-lg rounded-md overflow-hidden">
-          <GoogleMapComponent location={restaurantInfo.location} className="h-full w-full" />
+          <GoogleMapComponent location={restaurantInfo.exact_location} className="h-full w-full" />
         </div>
 
         {/* Información del restaurante */}
         <div className="w-full lg:w-3/5 p-6 bg-white shadow-lg rounded-md transition duration-300 transform hover:bg-gray-100 hover:shadow-2xl">
-          <h2 className="text-2xl font-semibold mb-4 flex items-center">
-            <InformationCircleIcon className="h-6 w-6 text-blue-500 mr-2" />
-            About the Restaurant
-          </h2>
-          <p className="mb-4 text-gray-700">{restaurantInfo.description}</p>
+          <div className="mb-6 p-6 bg-blue-50 border-l-4 border-blue-500 rounded-md shadow-md">
+            <h2 className="text-2xl font-semibold mb-4 flex items-center text-blue-700">
+              <InformationCircleIcon className="h-6 w-6 text-blue-500 mr-2" />
+              Sobre el Restaurante
+            </h2>
+            <p className="text-gray-700 leading-relaxed">{restaurantInfo.description}</p>
+          </div>
+
 
           <div className="mb-6">
             <h3 className="text-lg font-semibold flex items-center">
               <StarIcon className="h-5 w-5 text-yellow-500 mr-2" />
-              Specialties
+              Especialidad
             </h3>
-            <p className="ml-7 text-gray-600">{restaurantInfo.specialties}</p>
+            <ul className="ml-7 space-y-3">
+              {restaurantInfo.food_types.map((type, index) => (
+                <li
+                  key={index}
+                  className="flex items-center space-x-3 bg-yellow-100 text-yellow-900 p-3 rounded-lg shadow-md hover:bg-yellow-200 hover:shadow-lg hover:scale-105 transition-transform duration-300"
+                >
+                  <span className="inline-flex h-6 w-6 items-center justify-center bg-yellow-500 text-white rounded-full">
+                    <StarIcon className="h-4 w-4" />
+                  </span>
+                  <span className="font-medium">{type}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold flex items-center">
-              <UserGroupIcon className="h-5 w-5 text-green-500 mr-2" />
-              Target Audience
-            </h3>
-            <p className="ml-7 text-gray-600">{restaurantInfo.targetAudience}</p>
-          </div>
 
           {/* Contact Information */}
           <div className="mt-6">
@@ -119,7 +127,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Sección de Opiniones */}
-      <ReviewSection />
+      <ReviewSection restauranteId={restaurantInfo.id} />
 
       {/* Botón flotante de WhatsApp */}
       <a

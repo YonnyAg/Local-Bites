@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure-3q*vbqun*_f6v8^zef68zzhvknp7h5&(g9=ek@!zyd6p8o!e2l
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+from decouple import config
+GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY')
 
 
 # Application definition

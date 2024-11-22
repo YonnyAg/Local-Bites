@@ -8,6 +8,7 @@ from .models import Restaurante
 from .serializers import RestauranteSerializer
 import requests
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 
 @api_view(['POST'])
@@ -32,9 +33,17 @@ def register_user(request):
     # Retornar una respuesta exitosa
     return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
 
-def google_reviews(request):
-    place_id = 'ChIJncZ1Tje7FZYRtTyj9qy2_TQ'  # Reemplaza con el ID del lugar deseado
-    api_key = "AIzaSyDL-y7dKo4sHj0tzqTcJ7P2Hdp9UlLZ6Ao"
+def google_reviews(request, restaurante_id):
+    # Busca el restaurante por su ID
+    restaurante = get_object_or_404(Restaurante, id=restaurante_id)
+
+    # Usa el place_id almacenado en la base de datos
+    place_id = restaurante.place_id
+    if not place_id:
+        return JsonResponse({"error": "El restaurante no tiene un Google Place ID"}, status=400)
+
+    # Llama a la API de Google
+    api_key = settings.GOOGLE_MAPS_API_KEY
     url = f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=name,rating,reviews&language=es&key={api_key}'
 
     response = requests.get(url)
