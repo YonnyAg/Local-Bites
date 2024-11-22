@@ -87,9 +87,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'localbites',  # Nombre de tu base de datos
-        'USER': 'root',               # Usuario de MySQL
-        'PASSWORD': 'root',  # Contraseña de MySQL configurada
-        'HOST': '127.0.0.1',          # Servidor (localhost)
+        'USER': 'localbites',               # Usuario de MySQL
+        'PASSWORD': 'Proyectotitulo123',  # Contraseña de MySQL configurada
+        'HOST': 'localbites-svflex.mysql.database.azure.com',          # Servidor (localhost)
         'PORT': '3306',               # Puerto de MySQL
     }
 }
