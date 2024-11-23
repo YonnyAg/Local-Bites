@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon, HomeIcon, BuildingStorefrontIcon, ChatBubbleBottomCenterTextIcon, ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
+import { Bars3Icon, XMarkIcon, HomeIcon, BuildingStorefrontIcon, ChatBubbleBottomCenterTextIcon, ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon, UserIcon  } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = () => {
@@ -17,10 +17,15 @@ const Navbar = () => {
     { path: '/', text: 'Inicio', icon: <HomeIcon className="h-5 w-5 mr-1" />, key: 'home' },
     { path: '/locales', text: 'Locales', icon: <BuildingStorefrontIcon className="h-5 w-5 mr-1" />, key: 'locales' },
     { path: '/contacto', text: 'Contacto', icon: <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" />, key: 'contacto' },
-    isAuthenticated
-      ? { path: '/', text: 'Cerrar Sesión', icon: <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-1" />, onClick: handleLogout, key: 'logout' }
-      : { path: '/login', text: 'Iniciar Sesión', icon: <ArrowRightOnRectangleIcon className="h-5 w-5 mr-1" />, key: 'login' }
+    ...(isAuthenticated
+      ? [
+          { path: '/perfil', text: 'Perfil', icon: <UserIcon className="h-5 w-5 mr-1" />, key: 'perfil' },
+          { path: '/', text: 'Cerrar Sesión', icon: <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-1" />, onClick: handleLogout, key: 'logout' },
+        ]
+      : [{ path: '/login', text: 'Iniciar Sesión', icon: <ArrowRightOnRectangleIcon className="h-5 w-5 mr-1" />, key: 'login' }]
+    ),
   ];
+  
 
   return (
     <header className="fixed top-0 left-0 w-full bg-[#FFC600] z-50">

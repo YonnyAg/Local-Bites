@@ -6,6 +6,7 @@ import Premises from '../Premises';
 import Contact from '../Contact';
 import Login from '../Login';
 import ProfileRestaurant from '../ProfileRestaurant'
+import Profile from '../ProfileAccount'
 import Navbar from '../../Components/Navbar';
 import Footer from '../../Components/Footer';
 import Home from '../Home';
@@ -17,6 +18,7 @@ const AppRoutes = () => {
     { path: '/locales', element: <Premises /> },
     { path: '/contacto', element: <Contact /> },
     { path: '/login', element: <Login /> },
+    { path: '/perfil', element: <Profile /> },
     { path: '/restaurante/:id', element: <ProfileRestaurant /> },
   ]);
 

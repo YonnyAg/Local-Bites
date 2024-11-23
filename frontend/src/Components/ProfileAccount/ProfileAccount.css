@@ -1,0 +1,24 @@
+@keyframes gradient-x {
+    0% {
+      background-position: 0% 50%;
+      background-color: #fef08a; /* Amarillo pálido */
+    }
+    50% {
+      background-position: 100% 50%;
+      background-color: #fcd34d; /* Amarillo claro */
+    }
+    100% {
+      background-position: 0% 50%;
+      background-color: #fbbf24; /* Dorado suave */
+    }
+  }
+  
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 10s ease infinite; /* Suave y lento */
+  }
+
+
+.banner-css {
+    margin-top: 70px;
+}
