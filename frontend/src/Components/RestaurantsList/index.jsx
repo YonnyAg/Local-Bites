@@ -9,6 +9,7 @@ const Restaurante = () => {
   const [busqueda, setBusqueda] = useState('');
   const [tipoComida, setTipoComida] = useState(''); // Estado para el tipo de comida
   const [loading, setLoading] = useState(true); // Estado para mostrar el estado de carga
+  const BASE_URL = "http://localhost:8000"; // Define la URL base del backend
 
   // Función para obtener los restaurantes desde el backend
   const fetchRestaurantes = async () => {
@@ -114,7 +115,12 @@ const Restaurante = () => {
             className="restaurant-item flex items-center justify-between bg-white shadow-lg rounded-lg py-6 px-8 w-4/5 transform transition-transform duration-300 hover:scale-105 focus:outline-none"
           >
             <div className="flex items-center space-x-4">
-              <img src={sushiLogo} alt={restaurante.name} className="restaurant-logo w-12 h-12 rounded-full" />
+            <img
+              src={`${BASE_URL}${restaurante.image}`}
+              alt={restaurante.name}
+              className="restaurant-logo w-12 h-12 rounded-full"
+            />
+
               <div className="restaurant-info">
                 <h3 className="text-lg font-bold text-gray-900">{restaurante.name}</h3>
                 <p className="text-gray-600 hidden md:block">{restaurante.description}</p>

@@ -1,11 +1,11 @@
 import React from 'react';
 
 const Banner = ({ name, image }) => {
-  const placeholderImage = 'https://via.placeholder.com/1200x300';
+  const placeholderImage = 'http://localhost:8000';
   return (
     <div className="relative w-full h-80 mb-8 overflow-hidden border border-black shadow-lg rounded-md">
       <img
-        src={image || placeholderImage}
+        src={image}
         alt={name}
         className="w-full h-full object-cover"
       />

@@ -77,6 +77,7 @@ const ReviewSection = ({ restauranteId }) => {
 const ProfilePage = () => {
   const { id } = useParams(); // Obtiene el ID del restaurante desde la URL
   const [restaurantInfo, setRestaurantInfo] = useState(null);
+  const BASE_URL = "http://localhost:8000"; // Define la URL base del backend
 
   // Llama a la API para obtener los datos del restaurante
   useEffect(() => {
@@ -100,7 +101,7 @@ const ProfilePage = () => {
   return (
     <div className="relative w-full">
       {/* Banner */}
-      <Banner name={restaurantInfo.name} image={restaurantInfo.image} />
+      <Banner name={restaurantInfo.name} image={`${BASE_URL}${restaurantInfo.image}`}  />
 
       {/* Contenedor principal */}
       <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
