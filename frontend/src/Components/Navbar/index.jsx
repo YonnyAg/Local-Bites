@@ -38,7 +38,7 @@ const Navbar = () => {
             style={{ width: "100px", height: "100px" }}
             className="mr-3"
           />
-          <span className="text-2xl md:text-3xl text-dark font-bold">Local Bites</span>
+          <span className="text-2xl md:text-3xl text-dark font-bold">LocalBites</span>
         </NavLink>
 
         {/* Navegación en pantallas grandes */}
