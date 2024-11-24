@@ -11,6 +11,10 @@ const Restaurante = () => {
   const [loading, setLoading] = useState(true); // Estado para mostrar el estado de carga
   const BASE_URL = "http://localhost:8000"; // Define la URL base del backend
 
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+  };
+  
   // Función para obtener los restaurantes desde el backend
   const fetchRestaurantes = async () => {
     try {
@@ -123,7 +127,9 @@ const Restaurante = () => {
 
               <div className="restaurant-info">
                 <h3 className="text-lg font-bold text-gray-900">{restaurante.name}</h3>
-                <p className="text-gray-600 hidden md:block">{restaurante.description}</p>
+                <p className="text-gray-600 hidden md:block">
+                  {truncateText(restaurante.description, 100)} {/* Limita a 100 caracteres */}
+                </p>
                 <p className="text-gray-600 hidden md:block">Tipos de comida: {restaurante.food_types.join(', ')}</p>
               </div>
             </div>
