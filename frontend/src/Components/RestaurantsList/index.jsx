@@ -112,31 +112,33 @@ const Restaurante = () => {
 
       {/* Lista de restaurantes */}
       <div className="mt-8 w-full flex flex-col items-center space-y-6">
-        {restaurantesFiltrados.map((restaurante, index) => (
-          <button
-            key={index}
-            onClick={() => handleRestauranteClick(restaurante)}
-            className="restaurant-item flex items-center justify-between bg-white shadow-lg rounded-lg py-6 px-8 w-4/5 transform transition-transform duration-300 hover:scale-105 focus:outline-none"
-          >
-            <div className="flex items-center space-x-4">
-            <img
-              src={`${BASE_URL}${restaurante.image}`}
-              alt={restaurante.name}
-              className="restaurant-logo w-12 h-12 rounded-full"
-            />
-
-              <div className="restaurant-info">
-                <h3 className="text-lg font-bold text-gray-900">{restaurante.name}</h3>
-                <p className="text-gray-600 hidden md:block">
-                  {truncateText(restaurante.description, 100)} {/* Limita a 100 caracteres */}
-                </p>
-                <p className="text-gray-600 hidden md:block">Tipos de comida: {restaurante.food_types.join(', ')}</p>
-              </div>
-            </div>
-            <div className="restaurant-rating text-orange-500 font-semibold text-xl">{restaurante.rating}</div>
-          </button>
-        ))}
+  {restaurantesFiltrados.map((restaurante, index) => (
+    <button
+      key={index}
+      onClick={() => handleRestauranteClick(restaurante)}
+      className="restaurant-item flex flex-col md:flex-row items-center justify-between bg-white shadow-lg rounded-lg py-6 px-8 w-4/5 transform transition-transform duration-300 hover:scale-105 focus:outline-none text-center"
+    >
+      <div className="flex items-center space-x-4">
+        <img
+          src={`${BASE_URL}${restaurante.image}`}
+          alt={restaurante.name}
+          className="restaurant-logo w-12 h-12 rounded-full"
+        />
+        <h3 className="text-lg font-bold text-gray-900">{restaurante.name}</h3>
       </div>
+      <div className="restaurant-info w-full">
+        <p className="text-gray-600 mt-4 md:mt-0 md:text-center">
+          {truncateText(restaurante.description, 100)}
+        </p>
+        <p className="text-gray-600 md:text-center">Tipos de comida: {restaurante.food_types.join(', ')}</p>
+      </div>
+      <div className="restaurant-rating text-orange-500 font-semibold text-xl mt-4 md:mt-0 md:text-right">
+        {restaurante.rating}
+      </div>
+    </button>
+  ))}
+</div>
+
     </div>
   );
 };
