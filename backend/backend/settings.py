@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-
+from decouple import config
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -24,13 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3q*vbqun*_f6v8^zef68zzhvknp7h5&(g9=ek@!zyd6p8o!e2l'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
-from decouple import config
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY')
 
 
@@ -86,11 +85,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'localbites',  # Nombre de tu base de datos
-        'USER': 'localbites',               # Usuario de MySQL
-        'PASSWORD': 'Proyectotitulo123',  # Contraseña de MySQL configurada
-        'HOST': 'localbites-svflex.mysql.database.azure.com',          # Servidor (localhost)
-        'PORT': '3306',               # Puerto de MySQL
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT', default='3306'),
     }
 }
 
@@ -152,7 +151,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://local-bites-sepia.vercel.app",  # Dominio del frontend
+]
 
 MEDIA_URL = '/media/'  # URL base para acceder a archivos multimedia
 MEDIA_ROOT = BASE_DIR / 'media'
