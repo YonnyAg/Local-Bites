@@ -9,7 +9,7 @@ const Restaurante = () => {
   const [busqueda, setBusqueda] = useState('');
   const [tipoComida, setTipoComida] = useState(''); // Estado para el tipo de comida
   const [loading, setLoading] = useState(true); // Estado para mostrar el estado de carga
-  const BASE_URL = "http://localhost:8000"; // Define la URL base del backend
+  const BASE_URL = "https://local-bites-backend.onrender.com"; // Define la URL base del backend
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
@@ -18,7 +18,7 @@ const Restaurante = () => {
   // Función para obtener los restaurantes desde el backend
   const fetchRestaurantes = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/restaurantes/'); // Cambia la URL si es necesario
+      const response = await fetch('https://local-bites-backend.onrender.com/api/restaurantes/'); // Cambia la URL si es necesario
       const data = await response.json();
       setRestaurantes(data); // Actualiza los restaurantes con los datos de la API
     } catch (error) {
