@@ -160,7 +160,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "https://local-bites-sepia.vercel.app",  # Dominio del frontend
+    "https://local-bites-sepia.vercel.app", # Dominio del frontend 
+    "http://localhost:5173",
 ]
 
 MEDIA_URL = '/media/'  # URL base para acceder a archivos multimedia
