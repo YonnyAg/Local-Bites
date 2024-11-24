@@ -76,7 +76,7 @@ const Navbar = () => {
         {/* Logo */}
         <NavLink to="/" className="flex items-center">
           <img
-            src="../../../public/logo.svg"
+            src="/logo.svg"
             alt="Logo"
             style={{ width: "100px", height: "100px" }}
             className="mr-3"
