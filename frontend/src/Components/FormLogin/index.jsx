@@ -87,7 +87,7 @@ const LoginRegister = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('https://local-bites-backend.onrender.com/api/token/', { // URL actualizada
+      const response = await fetch('https://local-bites-backend.onrender.com/api/api/token/', { // URL actualizada
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
