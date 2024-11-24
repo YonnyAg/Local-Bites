@@ -83,27 +83,27 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'localbites',  # Nombre de tu base de datos
-#         'USER': 'localbites',               # Usuario de MySQL
-#         'PASSWORD': 'Proyectotitulo123',  # Contraseña de MySQL configurada
-#         'HOST': 'localbites-svflex.mysql.database.azure.com',          # Servidor (localhost)
-#         'PORT': '3306',               # Puerto de MySQL
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'localbites',  # Nombre de tu base de datos
-        'USER': 'root',               # Usuario de MySQL
-        'PASSWORD': 'root',  # Contraseña de MySQL configurada
-        'HOST': '127.0.0.1',          # Servidor (localhost)
+        'USER': 'localbites',               # Usuario de MySQL
+        'PASSWORD': 'Proyectotitulo123',  # Contraseña de MySQL configurada
+        'HOST': 'localbites-svflex.mysql.database.azure.com',          # Servidor (localhost)
         'PORT': '3306',               # Puerto de MySQL
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'localbites',  # Nombre de tu base de datos
+#         'USER': 'root',               # Usuario de MySQL
+#         'PASSWORD': 'root',  # Contraseña de MySQL configurada
+#         'HOST': '127.0.0.1',          # Servidor (localhost)
+#         'PORT': '3306',               # Puerto de MySQL
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

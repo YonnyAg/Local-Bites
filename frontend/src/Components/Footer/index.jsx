@@ -17,9 +17,9 @@ const Footer = () => {
                 <div className="footer-column flex-1 min-w-[250px] m-4">
                     <h3 className="text-dark mb-4 text-xl font-semibold">Enlaces Rápidos</h3>
                     <ul className="space-y-2">
-                        <li><a href="index.html" className="hover:text-white">Inicio</a></li>
-                        <li><a href="#" className="hover:text-white">Restaurantes</a></li>
-                        <li><a href="#" className="hover:text-white">Contacto</a></li>
+                        <li><a href="/" className="hover:text-white">Inicio</a></li>
+                        <li><a href="/locales" className="hover:text-white">Restaurantes</a></li>
+                        <li><a href="/contacto" className="hover:text-white">Contacto</a></li>
                     </ul>
                 </div>
 

@@ -10,6 +10,8 @@ import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 @api_view(['POST'])
 def register_user(request):
@@ -32,6 +34,25 @@ def register_user(request):
 
     # Retornar una respuesta exitosa
     return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def login_view(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+        # Generar los tokens usando SimpleJWT
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'isSuperUser': user.is_superuser  # Aquí añadimos el estado de superusuario
+        })
+
+    return Response({'error': 'Credenciales inválidas'}, status=401)
+
+
 
 def google_reviews(request, restaurante_id):
     # Busca el restaurante por su ID
@@ -64,4 +85,28 @@ class RestauranteDetail(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Restaurante.DoesNotExist:
             return Response({"error": "Restaurante no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Agregar información adicional al token
+        token['isSuperUser'] = user.is_superuser
+
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        
+        # Incluir el atributo isSuperUser en la respuesta
+        data['isSuperUser'] = self.user.is_superuser
+        return data
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
 

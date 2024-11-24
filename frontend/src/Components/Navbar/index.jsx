@@ -1,36 +1,79 @@
-import React, { useState, useContext } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon, HomeIcon, BuildingStorefrontIcon, ChatBubbleBottomCenterTextIcon, ArrowRightOnRectangleIcon, ArrowLeftOnRectangleIcon, UserIcon  } from '@heroicons/react/24/solid';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  HomeIcon,
+  BuildingStorefrontIcon,
+  ChatBubbleBottomCenterTextIcon,
+  ArrowRightOnRectangleIcon,
+  ArrowLeftOnRectangleIcon,
+  UserIcon,
+  CogIcon,
+} from "@heroicons/react/24/solid";
+import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout, isSuperUser } = useContext(AuthContext); // Contexto con isSuperUser
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   const navLinks = [
-    { path: '/', text: 'Inicio', icon: <HomeIcon className="h-5 w-5 mr-1" />, key: 'home' },
-    { path: '/locales', text: 'Locales', icon: <BuildingStorefrontIcon className="h-5 w-5 mr-1" />, key: 'locales' },
-    { path: '/contacto', text: 'Contacto', icon: <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" />, key: 'contacto' },
+    { path: "/", text: "Inicio", icon: <HomeIcon className="h-5 w-5 mr-1" />, key: "home" },
+    { path: "/locales", text: "Locales", icon: <BuildingStorefrontIcon className="h-5 w-5 mr-1" />, key: "locales" },
+    { path: "/contacto", text: "Contacto", icon: <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-1" />, key: "contacto" },
     ...(isAuthenticated
       ? [
-          { path: '/perfil', text: 'Perfil', icon: <UserIcon className="h-5 w-5 mr-1" />, key: 'perfil' },
-          { path: '/', text: 'Cerrar Sesión', icon: <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-1" />, onClick: handleLogout, key: 'logout' },
+          // Solo muestra el perfil si NO es superusuario
+          ...(isSuperUser
+            ? []
+            : [
+                {
+                  path: "/perfil",
+                  text: "Perfil",
+                  icon: <UserIcon className="h-5 w-5 mr-1" />,
+                  key: "perfil",
+                },
+              ]),
+          // Muestra el Panel de Admin si el usuario es superusuario
+          ...(isSuperUser
+            ? [
+                {
+                  path: "/adminpanel",
+                  text: "Panel de Admin",
+                  icon: <CogIcon className="h-5 w-5 mr-1" />,
+                  key: "admin-panel",
+                },
+              ]
+            : []),
+          // Enlace para cerrar sesión
+          {
+            path: "/",
+            text: "Cerrar Sesión",
+            icon: <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-1" />,
+            onClick: handleLogout,
+            key: "logout",
+          },
         ]
-      : [{ path: '/login', text: 'Iniciar Sesión', icon: <ArrowRightOnRectangleIcon className="h-5 w-5 mr-1" />, key: 'login' }]
-    ),
+      : [
+          {
+            path: "/login",
+            text: "Iniciar Sesión",
+            icon: <ArrowRightOnRectangleIcon className="h-5 w-5 mr-1" />,
+            key: "login",
+          },
+        ]),
   ];
-  
 
   return (
     <header className="fixed top-0 left-0 w-full bg-[#FFC600] z-50">
       <div className="max-w-[1400px] mx-auto px-5 flex justify-between items-center h-[70px]">
-        {/* Logo ajustado */}
+        {/* Logo */}
         <NavLink to="/" className="flex items-center">
           <img
             src="../../../public/logo.svg"
@@ -41,22 +84,21 @@ const Navbar = () => {
           <span className="text-2xl md:text-3xl text-dark font-bold">LocalBites</span>
         </NavLink>
 
-        {/* Navegación en pantallas grandes */}
+        {/* Links para pantallas grandes */}
         <nav className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <NavLink
               key={link.key}
               to={link.path}
-              onClick={link.onClick ? link.onClick : null} // Agrega onClick para "Cerrar Sesión"
-              className={({ isActive }) => `
-                flex items-center text-dark text-lg font-medium no-underline
-                relative after:content-[''] after:absolute 
-                after:bottom-[-4px] after:left-0 after:w-0 
-                after:h-[2px] after:bg-white after:transition-all 
-                after:duration-300 hover:after:w-full
-                ${isActive ? 'after:w-full' : ''}
-                hover:text-white
-              `}
+              onClick={link.onClick ? link.onClick : null}
+              className={({ isActive }) =>
+                `flex items-center text-dark text-lg font-medium no-underline relative 
+                 after:content-[''] after:absolute after:bottom-[-4px] after:left-0 
+                 after:w-0 after:h-[2px] after:bg-white after:transition-all 
+                 after:duration-300 hover:after:w-full ${
+                   isActive ? "after:w-full" : ""
+                 } hover:text-white`
+              }
             >
               {link.icon}
               {link.text}
@@ -64,7 +106,7 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Botón del menú para móviles */}
+        {/* Botón de menú para pantallas móviles */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="md:hidden text-dark"
@@ -73,9 +115,11 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Navegación desplegable en móvil */}
+      {/* Menú desplegable en móviles */}
       <nav
-        className={`md:hidden bg-[#FFC34A] overflow-hidden transition-all duration-300 ${isMenuOpen ? 'max-h-[400px]' : 'max-h-0'}`}
+        className={`md:hidden bg-[#FFC34A] overflow-hidden transition-all duration-300 ${
+          isMenuOpen ? "max-h-[400px]" : "max-h-0"
+        }`}
       >
         {navLinks.map((link) => (
           <NavLink
@@ -85,12 +129,11 @@ const Navbar = () => {
               setIsMenuOpen(false);
               if (link.onClick) link.onClick();
             }}
-            className={({ isActive }) => `
-              flex items-center block text-dark text-lg font-medium no-underline
-              py-4 px-5 border-b border-[#000000]
-              ${isActive ? 'bg-[#F3CA4C]' : ''}
-              hover:bg-dark hover:text-[#0e1f53] transition duration-300
-            `}
+            className={({ isActive }) =>
+              `flex items-center block text-dark text-lg font-medium no-underline py-4 px-5 border-b border-[#000000] ${
+                isActive ? "bg-[#F3CA4C]" : ""
+              } hover:bg-dark hover:text-[#0e1f53] transition duration-300`
+            }
           >
             {link.icon}
             {link.text}

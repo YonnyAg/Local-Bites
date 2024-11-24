@@ -16,7 +16,7 @@ const LoginRegister = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext); // Contexto de autenticación
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -87,24 +87,29 @@ const LoginRegister = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/token/', {
+      const response = await fetch('http://127.0.0.1:8000/api/api/token/', { // URL actualizada
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
+  
+        // Guardar tokens y estado de superusuario
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
+  
+        // Llamar a la función de login en el contexto
+        login(data.access, data.isSuperUser);
+  
         setUsername('');
         setPassword('');
         setError(null);
         setShowError(false);
-
-        login();
+  
         setTimeout(() => {
           setIsLoading(false);
           navigate('/');
@@ -120,7 +125,7 @@ const LoginRegister = () => {
       setShowError(true);
       setIsLoading(false);
     }
-  };
+  };  
 
   useEffect(() => {
     if (showError) {
