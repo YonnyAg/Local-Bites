@@ -68,7 +68,7 @@ const AddRestaurant = ({ onClose, setRestaurants }) => {
     });
   
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/restaurantes/add/", {
+      const response = await fetch("https://local-bites-backend.onrender.com/api/restaurantes/add/", {
         method: "POST",
         body: formDataToSend,
       });
@@ -94,10 +94,6 @@ const AddRestaurant = ({ onClose, setRestaurants }) => {
     }
   };
   
-  
-  
-  
-
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-bold mb-4">Agregar Restaurante</h2>

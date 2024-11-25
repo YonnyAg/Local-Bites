@@ -85,6 +85,15 @@ def add_restaurant(request):
         return Response(RestauranteSerializer(restaurante).data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+def delete_restaurant(request, pk):
+    try:
+        restaurant = Restaurante.objects.get(pk=pk)
+        restaurant.delete()
+        return Response({'message': 'Restaurante eliminado exitosamente'}, status=status.HTTP_204_NO_CONTENT)
+    except Restaurante.DoesNotExist:
+        return Response({'error': 'Restaurante no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 def get_food_types(request):
     try:
