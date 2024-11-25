@@ -1,20 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AddRestaurant = ({ onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     rating: "",
-    location: "lanco", // Valor por defecto
+    location: "lanco",
     food_types: [],
     phone: "",
     exact_location: "",
     place_id: "",
     image: null,
   });
-
+  const [foodTypes, setFoodTypes] = useState([]); // Para almacenar los tipos de comida desde el backend
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  // Obtener los food_types desde el backend
+  useEffect(() => {
+    const fetchFoodTypes = async () => {
+      try {
+        const response = await fetch("https://local-bites-backend.onrender.com/api/food_types/");
+        if (!response.ok) {
+          throw new Error("Error al cargar los tipos de comida");
+        }
+        const data = await response.json();
+        setFoodTypes(data); // Guardar los tipos de comida
+      } catch (err) {
+        console.error(err);
+        setError("No se pudieron cargar los tipos de comida.");
+      }
+    };
+
+    fetchFoodTypes();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,13 +44,23 @@ const AddRestaurant = ({ onClose }) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
+  const handleCheckboxChange = (e) => {
+    const value = Number(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      food_types: e.target.checked
+        ? [...prev.food_types, value] // Agregar el ID si está seleccionado
+        : prev.food_types.filter((id) => id !== value), // Eliminar el ID si se deselecciona
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === "food_types") {
-        formDataToSend.append(key, JSON.stringify(formData[key]));
+        formData[key].forEach((id) => formDataToSend.append("food_types", id)); // Enviar los IDs como campos individuales
       } else {
         formDataToSend.append(key, formData[key]);
       }
@@ -39,7 +68,7 @@ const AddRestaurant = ({ onClose }) => {
 
     try {
       const response = await fetch(
-        "https://local-bites-backend.onrender.com/api/api/restaurantes/add/",
+        "https://local-bites-backend.onrender.com/api/restaurantes/add/",
         {
           method: "POST",
           body: formDataToSend,
@@ -47,12 +76,14 @@ const AddRestaurant = ({ onClose }) => {
       );
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error:", errorData);
         throw new Error("Error al agregar el restaurante.");
       }
 
       setSuccess(true);
       setError(null);
-      onClose(); // Cerrar el modal o formulario después del éxito
+      onClose();
     } catch (err) {
       setError(err.message);
     }
@@ -115,6 +146,27 @@ const AddRestaurant = ({ onClose }) => {
             <option value="lanco">Lanco</option>
             <option value="mariquina">Mariquina</option>
           </select>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Tipos de Comida</label>
+          {foodTypes.length > 0 ? (
+            <div className="flex flex-wrap">
+              {foodTypes.map((foodType) => (
+                <label key={foodType.id} className="mr-4">
+                  <input
+                    type="checkbox"
+                    value={foodType.id}
+                    checked={formData.food_types.includes(foodType.id)}
+                    onChange={handleCheckboxChange}
+                  />
+                  {foodType.name}
+                </label>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Cargando tipos de comida...</p>
+          )}
         </div>
 
         <div className="mb-4">

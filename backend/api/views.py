@@ -13,6 +13,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import FoodType
+from rest_framework.parsers import MultiPartParser, FormParser
 
 @api_view(['POST'])
 def register_user(request):
@@ -73,11 +74,19 @@ def google_reviews(request, restaurante_id):
 
 @api_view(['POST'])
 def add_restaurant(request):
-    serializer = RestauranteSerializer(data=request.data)
+    parser_classes = (MultiPartParser, FormParser)
+    data = request.data
+
+    # Convertir `food_types` en una lista si es necesario
+    if "food_types" in data and not isinstance(data.get("food_types"), list):
+        data["food_types"] = request.POST.getlist("food_types")
+
+    serializer = RestauranteSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def get_food_types(request):
