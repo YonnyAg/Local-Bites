@@ -10,7 +10,8 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('google-reviews/<int:restaurante_id>/', views.google_reviews, name='google_reviews'),
     path('restaurantes/', views.RestauranteListView.as_view(), name='restaurante-list'),
-    path('api/restaurantes/add/', views.add_restaurant, name='add_restaurant'),
+    path('restaurantes/add/', views.add_restaurant, name='add_restaurant'),
+    path('food_types/', views.get_food_types, name='get_food_types'),
     path('restaurante/<int:id>/', views.RestauranteDetail.as_view(), name='restaurante-detail'),
 ]
 

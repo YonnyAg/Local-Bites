@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import AddRestaurant from "../AddRestaurant";
+import Modal from "../AddRestaurant/Modal"; // Asegúrate de importar correctamente Modal
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false); // Estado para el modal
 
   // Obtener restaurantes desde la API
   useEffect(() => {
@@ -17,7 +20,7 @@ const RestaurantList = () => {
           throw new Error("Error al cargar los datos de restaurantes");
         }
         const data = await response.json();
-        setRestaurants(data); // Suponiendo que `data` es un array de restaurantes
+        setRestaurants(data);
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
@@ -38,14 +41,17 @@ const RestaurantList = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Lista de Restaurantes</h2>
         <button
-          onClick={() => setShowAddForm(true)}
+          onClick={() => setShowAddForm(true)} // Abrir el modal
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
         >
           Agregar Restaurante
         </button>
-        {showAddForm && <AddRestaurant onClose={() => setShowAddForm(false)} />}
-
       </div>
+
+      {/* Modal para agregar restaurante */}
+      <Modal isOpen={showAddForm} onClose={() => setShowAddForm(false)}>
+        <AddRestaurant onClose={() => setShowAddForm(false)} />
+      </Modal>
 
       {/* Campo de Búsqueda */}
       <div className="mb-4">

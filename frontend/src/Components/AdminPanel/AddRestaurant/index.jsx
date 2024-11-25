@@ -39,7 +39,7 @@ const AddRestaurant = ({ onClose }) => {
 
     try {
       const response = await fetch(
-        "https://local-bites-backend.onrender.com/api/restaurantes/add/",
+        "https://local-bites-backend.onrender.com/api/api/restaurantes/add/",
         {
           method: "POST",
           body: formDataToSend,
