@@ -17,5 +17,6 @@ urlpatterns = [
     path('api/contact/', views.contact_message_view, name='contact_message'),
     path('api/contact/<int:id>/', views.contact_message_view),  # Para DELETE
     path('api/csrf/', views.csrf_token_view, name='csrf_token'),
+     path('restaurantes/<int:id>/', views.RestauranteDetail.as_view(), name='restaurante-detail'),
 ]
 

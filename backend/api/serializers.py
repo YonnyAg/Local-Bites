@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Restaurante, FoodType
+from .models import Restaurante, FoodType, SocialMedia
+
+class SocialMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialMedia
+        fields = ['instagram', 'facebook', 'whatsapp']  # Campos que deseas incluir
+
 
 class RestauranteSerializer(serializers.ModelSerializer):
     # Usamos un campo para devolver solo los IDs de los food_types
@@ -14,6 +20,7 @@ class RestauranteSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    social_media = SocialMediaSerializer(many=True, read_only=True)
     class Meta:
         model = Restaurante
         fields = '__all__'
@@ -29,3 +36,4 @@ class FoodTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodType
         fields = ['id', 'name']
+

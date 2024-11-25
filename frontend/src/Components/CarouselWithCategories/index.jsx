@@ -11,38 +11,37 @@ import sandwich_toffer from '../../assets/CarouselHome/Food/sandwiche-toffer.jpg
 import sandwich_tonizzia from '../../assets/CarouselHome/Food/sandwiche-tonizzia.jpg'
 import sandwich_fuerte from '../../assets/CarouselHome/Food/sandwiche-fuerte.png'
 
+import parrilla_tonizzia from '../../assets/CarouselHome/Food/parrilla-tonizzia.jpg'
+import parrilla_tonizzia2 from '../../assets/CarouselHome/Food/parrilla-tonizzia2.jpg'
+import parrilla_tonizzia3 from '../../assets/CarouselHome/Food/parrilla-tonizzia3.jpg'
+
+import tabla_toffer from '../../assets/CarouselHome/Food/tabla-toffer.jpg'
+import tabla_toffer2 from '../../assets/CarouselHome/Food/tabla-toffer2.jpg'
+import tabla_fuerte from '../../assets/CarouselHome/Food/tabla-fuerte.png'
+
 const categories = [
   {
     title: 'Sandwiches',
     items: [
-      { name: 'Barros Luco', description: 'Carne de res + queso fundido', price: '$7.000', rating: 4.5, image: sandwich_toffer, link: '#' },
-      { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '#' },
-      { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '#' },
-      { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '/restaurant/sushi-master' },
-      { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '/restaurant/yu-sushi' },
-      { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '/restaurant/sushi-master' },
+      { name: 'Sandwich Tonizzia', description: 'Carne de res + Cebolla + Queso...', price: '$7.200', rating: 4.7, image: sandwich_tonizzia, link: '/restaurante/23' },
+      { name: 'Barros Luco', description: 'Carne de res + queso fundido', price: '$7.000', rating: 4.5, image: sandwich_toffer, link: '/restaurante/24' },
+      { name: 'Barros Luco', description: 'Carne de res + queso fundido', price: '$6.500', rating: 4.5, image: sandwich_fuerte, link: '/restaurante/25' },
     ],
   },
   {
-    title: 'Sandwiches',
+    title: 'Parrillas',
     items: [
-      { name: 'Burger Palace', description: 'Juicy beef burger', price: '$10.00', rating: 4.2, image: sandwichImage, link: '/restaurant/burger-palace' },
-      { name: 'Sandwich Delight', description: 'Fresh ingredients', price: '$12.00', rating: 4.3, image: sandwichImage, link: '/restaurant/sandwich-delight' },
-      { name: 'Burger Palace', description: 'Juicy beef burger', price: '$10.00', rating: 4.2, image: sandwichImage, link: '/restaurant/burger-palace' },
-      { name: 'Sandwich Delight', description: 'Fresh ingredients', price: '$12.00', rating: 4.3, image: sandwichImage, link: '/restaurant/sandwich-delight' },
-      { name: 'Burger Palace', description: 'Juicy beef burger', price: '$10.00', rating: 4.2, image: sandwichImage, link: '/restaurant/burger-palace' },
-      { name: 'Sandwich Delight', description: 'Fresh ingredients', price: '$12.00', rating: 4.3, image: sandwichImage, link: '/restaurant/sandwich-delight' },
+      { name: 'Lomo vetado', description: 'Acompañado con puré', price: '$7.900', rating: 4.5, image: parrilla_tonizzia, link: '/restaurante/23' },
+      { name: 'Entrecot y bife chorizo', description: 'Plato especial', price: '$7.900', rating: 4.8, image: parrilla_tonizzia2, link: '/restaurante/23' },
+      { name: 'Bife chorizo', description: 'Plato especial', price: '$7.900', rating: 4.2, image: parrilla_tonizzia3, link: '/restaurante/23' },
     ],
   },
   {
-    title: 'Postres',
+    title: 'Para Picar',
     items: [
-      { name: 'Sweet Treats', description: 'Delicious desserts', price: '$8.00', rating: 4.9, image: dessertImage, link: '/restaurant/sweet-treats' },
-      { name: 'Choco Heaven', description: 'Chocolate desserts', price: '$7.00', rating: 4.7, image: dessertImage, link: '/restaurant/choco-heaven' },
-      { name: 'Sweet Treats', description: 'Delicious desserts', price: '$8.00', rating: 4.9, image: dessertImage, link: '/restaurant/sweet-treats' },
-      { name: 'Choco Heaven', description: 'Chocolate desserts', price: '$7.00', rating: 4.7, image: dessertImage, link: '/restaurant/choco-heaven' },
-      { name: 'Sweet Treats', description: 'Delicious desserts', price: '$8.00', rating: 4.9, image: dessertImage, link: '/restaurant/sweet-treats' },
-      { name: 'Choco Heaven', description: 'Chocolate desserts', price: '$7.00', rating: 4.7, image: dessertImage, link: '/restaurant/choco-heaven' },
+      { name: 'Pichanga', description: 'Pichanga para dos personas', price: '$15.000', rating: 4.4, image: tabla_toffer, link: '/restaurante/24' },
+      { name: 'Chorillana', description: 'Chorillana para tres personas', price: '$12.000', rating: 4.3, image: tabla_toffer2, link: '/restaurante/24' },
+      { name: 'Pichanga', description: 'Individual', price: '$10.000', rating: 4.1, image: tabla_fuerte, link: '/restaurante/25' },
     ],
   },
 ];

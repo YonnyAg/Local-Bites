@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Restaurante, FoodType, ContactMessage
-from .serializers import RestauranteSerializer, FoodTypeSerializer
+from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer
 import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -118,15 +118,25 @@ class RestauranteListView(APIView):
         restaurantes = Restaurante.objects.all()
         serializer = RestauranteSerializer(restaurantes, many=True)
         return Response(serializer.data)
-    
+
 class RestauranteDetail(APIView):
     def get(self, request, id):
         try:
             restaurante = Restaurante.objects.get(id=id)
             serializer = RestauranteSerializer(restaurante)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+
+            # Obtener redes sociales asociadas
+            social_media = SocialMedia.objects.filter(restaurante=restaurante)
+            social_media_serializer = SocialMediaSerializer(social_media, many=True)
+
+            # Combinar los datos del restaurante y las redes sociales
+            response_data = serializer.data
+            response_data['social_media'] = social_media_serializer.data
+
+            return Response(response_data, status=status.HTTP_200_OK)
         except Restaurante.DoesNotExist:
             return Response({"error": "Restaurante no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
         
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -199,6 +209,4 @@ def contact_message_view(request, id=None):
             return JsonResponse({'error': 'Mensaje no encontrado'}, status=404)
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
 

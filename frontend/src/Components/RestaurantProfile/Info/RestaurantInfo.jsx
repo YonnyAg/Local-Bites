@@ -1,7 +1,10 @@
 import React from 'react';
-import { PhoneIcon, EnvelopeIcon, InformationCircleIcon, StarIcon } from '@heroicons/react/24/solid';
+import { PhoneIcon, InformationCircleIcon, StarIcon } from '@heroicons/react/24/solid';
+import { FaInstagram } from 'react-icons/fa'; // Importa el ícono de Instagram
 
 const RestaurantInfo = ({ restaurantInfo }) => {
+  const socialMedia = restaurantInfo.social_media?.[0] || {}; // Accede a las redes sociales del restaurante
+
   return (
     <div className="p-6 bg-white shadow-lg rounded-md">
       {/* Descripción */}
@@ -20,7 +23,7 @@ const RestaurantInfo = ({ restaurantInfo }) => {
           Especialidad
         </h3>
         <ul className="ml-7 space-y-3">
-          {restaurantInfo.food_types.map((type, index) => (
+          {restaurantInfo.food_types_names.map((type, index) => (
             <li
               key={index}
               className="flex items-center space-x-3 bg-yellow-100 text-yellow-900 p-3 rounded-lg shadow-md hover:bg-yellow-200 hover:shadow-lg hover:scale-105 transition-transform duration-300"
@@ -40,14 +43,24 @@ const RestaurantInfo = ({ restaurantInfo }) => {
           Contacto
         </h3>
         <div className="space-y-4">
+          {/* Teléfono */}
           <div className="flex items-center bg-green-100 p-3 rounded-md shadow-sm hover:bg-green-200 transition-colors">
             <PhoneIcon className="h-6 w-6 text-green-700 mr-3" />
             <span className="text-green-900 font-medium">{restaurantInfo.phone}</span>
           </div>
-          <div className="flex items-center bg-green-100 p-3 rounded-md shadow-sm hover:bg-green-200 transition-colors">
-            <EnvelopeIcon className="h-6 w-6 text-green-700 mr-3" />
-            <span className="text-green-900 font-medium">{restaurantInfo.email}</span>
-          </div>
+
+          {/* Instagram */}
+          {socialMedia.instagram && (
+            <a
+              href={socialMedia.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center bg-green-100 p-3 rounded-md shadow-sm hover:bg-green-200 transition-colors"
+            >
+              <FaInstagram className="h-6 w-6 text-pink-500 mr-3" />
+              <span className="text-green-900 font-medium">Instagram</span>
+            </a>
+          )}
         </div>
       </div>
 

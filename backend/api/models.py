@@ -25,6 +25,24 @@ class Restaurante(models.Model):
 
     def __str__(self):
         return self.name
+    
+class SocialMedia(models.Model):
+    restaurante = models.ForeignKey(
+        Restaurante, 
+        on_delete=models.CASCADE, 
+        related_name="social_media",
+        verbose_name="Restaurante"
+    )
+    instagram = models.URLField(max_length=255, verbose_name="Instagram", null=True, blank=True)
+    facebook = models.URLField(max_length=255, verbose_name="Facebook", null=True, blank=True)
+    whatsapp = models.URLField(max_length=255, verbose_name="WhatsApp", null=True, blank=True)
+
+    def __str__(self):
+        return f"Redes Sociales de {self.restaurante.name}"
+
+    class Meta:
+        verbose_name = "Red Social"
+        verbose_name_plural = "Redes Sociales"
 
 class ContactMessage(models.Model):
     LOCATION_CHOICES = [
