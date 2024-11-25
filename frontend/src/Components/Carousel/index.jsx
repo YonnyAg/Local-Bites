@@ -16,19 +16,19 @@ const Carousel = () => {
             img: tonizzia,
             title: 'Tonizzia',
             subtitle: 'Tonizzia restaurante-bar, ofrece carnes a la parrilla y platos de la zona, además de una variada carta de tragos',
-            link: '#',
+            link: '/restaurante/23',
         },
         {
             img: toffer,
-            title: 'Cafetería Pentukun',
+            title: 'New Toffer',
             subtitle: 'Toffer restaurante, con gran variedad de platos y almuerzo los días de semana.',
-            link: '#',
+            link: '/restaurante/24',
         },
         {
             img: fuerte,
             title: 'El fuerte',
             subtitle: ' El fuerte restobar es un local dedicado a la gastronomía fusión con variedad de cervezas artesanales de San José de la Mariquina.',
-            link: '#',
+            link: '/restaurante/25',
         },
     ];
 
