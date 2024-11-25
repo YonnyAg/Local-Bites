@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Restaurante
-from .serializers import RestauranteSerializer
+from .serializers import RestauranteSerializer, FoodTypeSerializer
 import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -81,9 +81,13 @@ def add_restaurant(request):
 
 @api_view(['GET'])
 def get_food_types(request):
-    food_types = FoodType.objects.all()  # Obtenemos todos los tipos de comida
-    serializer = RestauranteSerializer(food_types, many=True)  # Serializamos los datos
-    return Response(serializer.data)
+    try:
+        food_types = FoodType.objects.all()  # Obtenemos todos los tipos de comida
+        serializer = FoodTypeSerializer(food_types, many=True)  # Usamos el serializer específico
+        return Response(serializer.data, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
 
 class RestauranteListView(APIView):
     def get(self, request):
