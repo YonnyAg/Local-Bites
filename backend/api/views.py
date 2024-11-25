@@ -53,7 +53,6 @@ def login_view(request):
     return Response({'error': 'Credenciales inválidas'}, status=401)
 
 
-
 def google_reviews(request, restaurante_id):
     # Busca el restaurante por su ID
     restaurante = get_object_or_404(Restaurante, id=restaurante_id)
@@ -70,6 +69,14 @@ def google_reviews(request, restaurante_id):
     response = requests.get(url)
     data = response.json()
     return JsonResponse(data)
+
+@api_view(['POST'])
+def add_restaurant(request):
+    serializer = RestauranteSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RestauranteListView(APIView):
     def get(self, request):
