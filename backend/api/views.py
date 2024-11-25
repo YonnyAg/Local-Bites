@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Restaurante
-from .serializers import RestauranteSerializer, FoodTypeSerializer
+from .serializers import RestauranteSerializer
 import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -72,27 +72,24 @@ def google_reviews(request, restaurante_id):
     data = response.json()
     return JsonResponse(data)
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import RestauranteSerializer
+
 @api_view(['POST'])
 def add_restaurant(request):
-    parser_classes = (MultiPartParser, FormParser)
-    data = request.data
-
-    # Convertir `food_types` en una lista si es necesario
-    if "food_types" in data and not isinstance(data.get("food_types"), list):
-        data["food_types"] = request.POST.getlist("food_types")
-
-    serializer = RestauranteSerializer(data=data)
+    serializer = RestauranteSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        restaurante = serializer.save()
+        return Response(RestauranteSerializer(restaurante).data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 def get_food_types(request):
     try:
         food_types = FoodType.objects.all()  # Obtenemos todos los tipos de comida
-        serializer = FoodTypeSerializer(food_types, many=True)  # Usamos el serializer específico
+        serializer = RestauranteSerializer(food_types, many=True)  # Usamos el serializer específico
         return Response(serializer.data, status=200)
     except Exception as e:
         return Response({"error": str(e)}, status=500)

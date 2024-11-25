@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const AddRestaurant = ({ onClose }) => {
+const AddRestaurant = ({ onClose, setRestaurants }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -56,38 +56,47 @@ const AddRestaurant = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const formDataToSend = new FormData();
+  
+    // Construir FormData
     Object.keys(formData).forEach((key) => {
       if (key === "food_types") {
-        formData[key].forEach((id) => formDataToSend.append("food_types", id)); // Enviar los IDs como campos individuales
+        formData[key].forEach((id) => formDataToSend.append("food_types", id));
       } else {
         formDataToSend.append(key, formData[key]);
       }
     });
-
+  
     try {
-      const response = await fetch(
-        "https://local-bites-backend.onrender.com/api/restaurantes/add/",
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
-      );
-
-      if (!response.ok) {
+      const response = await fetch("http://127.0.0.1:8000/api/restaurantes/add/", {
+        method: "POST",
+        body: formDataToSend,
+      });
+  
+      if (response.ok) {
+        const newRestaurant = await response.json();
+        console.log("Restaurante creado:", newRestaurant);
+  
+        // Actualizar la lista en tiempo real
+        setRestaurants((prevRestaurants) => [...prevRestaurants, newRestaurant]);
+  
+        setSuccess(true);
+        setError(null);
+        onClose(); // Cierra el modal tras el éxito
+      } else {
         const errorData = await response.json();
         console.error("Error:", errorData);
-        throw new Error("Error al agregar el restaurante.");
+        setError("No se pudo agregar el restaurante. Revisa los datos.");
       }
-
-      setSuccess(true);
-      setError(null);
-      onClose();
     } catch (err) {
-      setError(err.message);
+      console.error("Error al conectar con el servidor:", err);
+      setError("Error de conexión con el servidor.");
     }
   };
+  
+  
+  
+  
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
@@ -188,6 +197,18 @@ const AddRestaurant = ({ onClose }) => {
             value={formData.exact_location}
             onChange={handleInputChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700">Google Place ID</label>
+          <input
+            type="text"
+            name="place_id"
+            value={formData.place_id}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none"
+            required
           />
         </div>
 

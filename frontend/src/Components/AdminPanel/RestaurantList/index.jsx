@@ -3,7 +3,7 @@ import AddRestaurant from "../AddRestaurant";
 import Modal from "../AddRestaurant/Modal"; // Asegúrate de importar correctamente Modal
 
 const RestaurantList = () => {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState([]); // Estado de la lista
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ const RestaurantList = () => {
           throw new Error("Error al cargar los datos de restaurantes");
         }
         const data = await response.json();
-        setRestaurants(data);
+        setRestaurants(data); // Guardar los datos en el estado
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
@@ -50,8 +50,13 @@ const RestaurantList = () => {
 
       {/* Modal para agregar restaurante */}
       <Modal isOpen={showAddForm} onClose={() => setShowAddForm(false)}>
-        <AddRestaurant onClose={() => setShowAddForm(false)} />
+        <AddRestaurant 
+          onClose={() => setShowAddForm(false)} 
+          setRestaurants={setRestaurants} // Pasamos setRestaurants aquí
+        />
       </Modal>
+
+
 
       {/* Campo de Búsqueda */}
       <div className="mb-4">
