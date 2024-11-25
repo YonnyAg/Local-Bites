@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Restaurante
+from .models import Restaurante, FoodType, ContactMessage
 from .serializers import RestauranteSerializer
 import requests
 from django.http import JsonResponse
@@ -12,8 +12,16 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import FoodType
 from rest_framework.parsers import MultiPartParser, FormParser
+import json
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
+from django.middleware.csrf import get_token
+
+
+def csrf_token_view(request):
+    token = get_token(request)
+    return JsonResponse({'csrfToken': token})
 
 @api_view(['POST'])
 def register_user(request):
@@ -86,6 +94,7 @@ def add_restaurant(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+
 def delete_restaurant(request, pk):
     try:
         restaurant = Restaurante.objects.get(pk=pk)
@@ -141,5 +150,55 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+@csrf_exempt  # Desactiva el CSRF para facilitar pruebas (no recomendado para producción)
+def contact_message_view(request, id=None):
+    if request.method == 'GET':
+        # Devuelve todas las solicitudes de contacto
+        messages = ContactMessage.objects.all()
+        data = [
+            {
+                'id': message.id,
+                'name': f"{message.nombre} {message.apellido}",
+                'email': message.correo_electronico,
+                'suggestion': message.mensaje,
+                'read': False,  # Puedes cambiar esto según tu lógica
+            }
+            for message in messages
+        ]
+        return JsonResponse(data, safe=False)
+    
+    if request.method == 'POST':
+        try:
+            # Parsear el JSON de la solicitud
+            data = json.loads(request.body)
+            
+            # Crear un nuevo mensaje de contacto
+            contact_message = ContactMessage.objects.create(
+                nombre=data.get('nombre'),
+                apellido=data.get('apellido'),
+                correo_electronico=data.get('correo'),
+                ubicacion=data.get('ubicacion'),
+                motivo=data.get('motivo'),
+                mensaje=data.get('mensaje')
+            )
+            # Retornar respuesta exitosa
+            return JsonResponse({'message': 'Mensaje enviado exitosamente'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    if request.method == 'DELETE':
+        if not id:
+            return JsonResponse({'error': 'ID de mensaje requerido para eliminar'}, status=400)
+        try:
+            # Intentar obtener y eliminar el mensaje
+            message = ContactMessage.objects.get(id=id)
+            message.delete()
+            return JsonResponse({'message': 'Mensaje eliminado correctamente'}, status=200)
+        except ContactMessage.DoesNotExist:
+            return JsonResponse({'error': 'Mensaje no encontrado'}, status=404)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 

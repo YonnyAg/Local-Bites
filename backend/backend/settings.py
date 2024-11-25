@@ -164,6 +164,15 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://local-bites-sepia.vercel.app",  # Tu dominio de producción
+    "http://localhost:5173",  # Frontend local
+]
+
+
+
 MEDIA_URL = '/media/'  # URL base para acceder a archivos multimedia
 MEDIA_ROOT = BASE_DIR / 'media'
 

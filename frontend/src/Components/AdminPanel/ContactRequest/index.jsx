@@ -1,25 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const ContactRequests = () => {
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      name: "Juan Pérez",
-      email: "juan@example.com",
-      suggestion: "Me gustaría que añadieran más opciones vegetarianas.",
-      read: false,
-    },
-    {
-      id: 2,
-      name: "María López",
-      email: "maria@example.com",
-      suggestion: "¿Podrían mejorar el tiempo de respuesta en los pedidos?",
-      read: true,
-    },
-  ]);
-
+  const [requests, setRequests] = useState([]); // Inicialmente vacío
   const [searchTerm, setSearchTerm] = useState("");
   const [modalContent, setModalContent] = useState(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(null); // Controla si se muestra el modal de confirmación
+
+  // Función para obtener los datos desde la API
+  const fetchContacts = async () => {
+    try {
+      const response = await fetch("https://local-bites-backend.onrender.com/api/api/contact/");
+      if (!response.ok) {
+        throw new Error("Error al obtener los contactos");
+      }
+      const data = await response.json();
+      setRequests(data); // Asume que la API devuelve un arreglo de contactos
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+      alert("Hubo un problema al cargar los contactos.");
+    }
+  };
+
+  // Cargar los datos al montar el componente
+  useEffect(() => {
+    fetchContacts();
+  }, []);
 
   // Filtrar solicitudes
   const filteredRequests = requests.filter(
@@ -38,11 +43,28 @@ const ContactRequests = () => {
   };
 
   // Eliminar solicitud
-  const deleteRequest = (id) => {
-    setRequests((prevRequests) => prevRequests.filter((req) => req.id !== id));
+  const deleteRequest = async (id) => {
+    try {
+      const response = await fetch(`https://local-bites-backend.onrender.com/api/api/contact/${id}/`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Error al eliminar el mensaje");
+      }
+      setRequests((prevRequests) => prevRequests.filter((req) => req.id !== id));
+      setDeleteConfirmation(null); // Cerrar el modal de confirmación
+    } catch (error) {
+      console.error("Error al eliminar el mensaje:", error);
+      alert("Hubo un problema al eliminar el mensaje.");
+    }
   };
 
-  // Abrir modal
+  // Abrir modal de confirmación de eliminación
+  const confirmDeleteRequest = (id) => {
+    setDeleteConfirmation(id);
+  };
+
+  // Abrir modal para leer sugerencias
   const openModal = (content) => {
     setModalContent(content);
   };
@@ -50,6 +72,7 @@ const ContactRequests = () => {
   // Cerrar modal
   const closeModal = () => {
     setModalContent(null);
+    setDeleteConfirmation(null); // Cerrar también el modal de confirmación
   };
 
   return (
@@ -103,7 +126,7 @@ const ContactRequests = () => {
                   </button>
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
-                    onClick={() => deleteRequest(request.id)}
+                    onClick={() => confirmDeleteRequest(request.id)}
                   >
                     Eliminar
                   </button>
@@ -120,7 +143,7 @@ const ContactRequests = () => {
         </tbody>
       </table>
 
-      {/* Modal */}
+      {/* Modal para leer sugerencias */}
       {modalContent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
@@ -132,6 +155,30 @@ const ContactRequests = () => {
             >
               Cerrar
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmación de eliminación */}
+      {deleteConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
+            <h3 className="text-lg font-bold mb-4">¿Estás seguro?</h3>
+            <p className="mb-4">Esta acción no se puede deshacer.</p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition"
+                onClick={closeModal}
+              >
+                Cancelar
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+                onClick={() => deleteRequest(deleteConfirmation)}
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       )}

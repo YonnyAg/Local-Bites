@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserIcon, EnvelopeIcon, MapPinIcon, ListBulletIcon } from '@heroicons/react/24/outline';
+import { UserIcon, EnvelopeIcon, MapPinIcon, ListBulletIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -10,28 +10,21 @@ const ContactForm = () => {
     motivo: 'Motivo 1',
     mensaje: '',
   });
-  
+
   const [emailError, setEmailError] = useState(''); // Para manejar el error de correo electrónico
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Controla si se muestra el mensaje de éxito
 
   const maxCharacters = 1000;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validación de correo electrónico
     if (name === 'correo') {
       const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.(com|cl)$/;
-      if (!emailPattern.test(value)) {
-        setEmailError('Por favor, ingresa un correo válido de Gmail (.com o .cl)');
-      } else {
-        setEmailError('');
-      }
+      setEmailError(emailPattern.test(value) ? '' : 'Por favor, ingresa un correo válido de Gmail (.com o .cl)');
     }
 
-    // Limita el campo de mensaje a 1000 caracteres
-    if (name === "mensaje" && value.length > maxCharacters) {
-      return;
-    }
+    if (name === 'mensaje' && value.length > maxCharacters) return;
 
     setFormData({
       ...formData,
@@ -39,17 +32,72 @@ const ContactForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const getCsrfToken = async () => {
+    try {
+      const response = await fetch('https://local-bites-backend.onrender.com/api/api/csrf/');
+      const data = await response.json();
+      return data.csrfToken;
+    } catch (error) {
+      console.error('Error al obtener el token CSRF:', error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const csrfToken = await getCsrfToken();
+
     if (!emailError) {
-      console.log(formData);
+      try {
+        const response = await fetch('https://local-bites-backend.onrender.com/api/api/contact/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken, // Incluir el token CSRF
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setShowSuccessMessage(true); // Mostrar mensaje de éxito
+          setTimeout(() => setShowSuccessMessage(false), 3000); // Ocultar mensaje automáticamente después de 3 segundos
+          setFormData({
+            nombre: '',
+            apellido: '',
+            correo: '',
+            ubicacion: 'Lanco',
+            motivo: 'Motivo 1',
+            mensaje: '',
+          });
+        } else {
+          console.error('Error al enviar los datos:', response.statusText);
+          alert('Error al enviar los datos.');
+        }
+      } catch (error) {
+        console.error('Error en la conexión con el servidor:', error);
+        alert('Error al conectar con el servidor.');
+      }
+    } else {
+      alert('Por favor, corrige los errores antes de enviar.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-white rounded-lg shadow-md p-6 max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 relative">
         
+        {/* Mensaje de éxito */}
+        {showSuccessMessage && (
+          <div className="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center space-y-4 animate-fade-in">
+              <CheckCircleIcon className="w-12 h-12 text-green-500" />
+              <h2 className="text-xl font-semibold text-gray-800">¡Mensaje enviado exitosamente!</h2>
+              <p className="text-gray-600 text-center">Gracias por contactarnos. Nos pondremos en contacto contigo lo antes posible.</p>
+            </div>
+          </div>
+        )}
+
         {/* Sección de Información */}
         <div className="space-y-4">
           <h2 className="text-3xl font-bold text-gray-800">Contáctanos</h2>
@@ -148,14 +196,14 @@ const ContactForm = () => {
                 onChange={handleChange}
                 className="mt-1 p-2 pl-8 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
               >
-                <option value="Motivo 1">Motivo 1</option>
-                <option value="Motivo 2">Motivo 2</option>
-                <option value="Motivo 3">Motivo 3</option>
+                <option value="Contacto">Contacto</option>
+                <option value="Sugerencia">Sugerencia</option>
+                <option value="Agregar local">Agregar local</option>
               </select>
             </div>
           </div>
 
-          {/* Mensaje con Contador de Caracteres */}
+          {/* Mensaje */}
           <div className="relative">
             <label className="block text-sm font-medium text-gray-700">Mensaje</label>
             <textarea
@@ -177,7 +225,7 @@ const ContactForm = () => {
             <button
               type="submit"
               className="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700 transition duration-200"
-              disabled={!!emailError} // Desactiva el botón si hay un error en el correo
+              disabled={!!emailError}
             >
               Enviar
             </button>

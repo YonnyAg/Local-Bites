@@ -15,7 +15,7 @@ const RestaurantList = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/restaurantes/");
+        const response = await fetch("https://local-bites-backend.onrender.com/api/restaurantes/");
         if (!response.ok) {
           throw new Error("Error al cargar los datos de restaurantes");
         }
@@ -45,7 +45,7 @@ const RestaurantList = () => {
     if (restaurantToDelete) {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/restaurantes/${restaurantToDelete.id}/delete/`,
+          `https://local-bites-backend.onrender.com/api/restaurantes/${restaurantToDelete.id}/delete/`,
           { method: "DELETE" }
         );
 

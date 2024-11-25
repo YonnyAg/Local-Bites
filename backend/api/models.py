@@ -26,6 +26,34 @@ class Restaurante(models.Model):
     def __str__(self):
         return self.name
 
+class ContactMessage(models.Model):
+    LOCATION_CHOICES = [
+        ('Lanco', 'Lanco'),
+        ('Mariquina', 'Mariquina'),
+    ]
+    MOTIVE_CHOICES = [
+        ('contacto', 'Contacto'),
+        ('sugerencia', 'Sugerencia'),
+        ('agregar_local', 'Agregar Local'),
+    ]
+
+    nombre = models.CharField(max_length=50, verbose_name="Nombre")
+    apellido = models.CharField(max_length=50, verbose_name="Apellido")
+    correo_electronico = models.EmailField(verbose_name="Correo Electrónico")
+    ubicacion = models.CharField(max_length=50, choices=LOCATION_CHOICES, verbose_name="Ubicación")
+    motivo = models.CharField(max_length=20, choices=MOTIVE_CHOICES, verbose_name="Motivo")
+    mensaje = models.TextField(max_length=1000, verbose_name="Mensaje")
+    fecha_envio = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Envío")
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} - {self.get_motivo_display()}"
+
+    class Meta:
+        verbose_name = "Mensaje de Contacto"
+        verbose_name_plural = "Mensajes de Contacto"
+
+
+
 
 
 
