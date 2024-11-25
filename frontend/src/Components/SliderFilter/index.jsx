@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './SliderFilter.css';
 import categoriaSushi from '../../assets/slider/categoria_sushi.png';
 import categoriaCarne from '../../assets/slider/categoria_carne.png';
@@ -9,27 +9,43 @@ import categoriaHamburguesas from '../../assets/slider/categoria_hamburguesas.pn
 import categoriaPostres from '../../assets/slider/categoria_postres.png';
 import categoriaDesayunos from '../../assets/slider/categoria_desayunos.png';
 
-const SliderComponent = () => {
-  const slideData = [
-    { src: categoriaSushi, text: 'Sushi', categoria: 'sushi' },
-    { src: categoriaCarne, text: 'Parrillas', categoria: 'carnes' },
-    { src: categoriaSalmon, text: 'Comida de mar', categoria: 'mar' },
-    { src: categoriaPizza, text: 'Pizza', categoria: 'pizza' },
-    { src: categoriaPastas, text: 'Pastas', categoria: 'pastas' },
-    { src: categoriaHamburguesas, text: 'Hamburguesa', categoria: 'hamburguesas' },
-    { src: categoriaPostres, text: 'Postres', categoria: 'postres' },
-    { src: categoriaDesayunos, text: 'Desayunos', categoria: 'desayunos' }
-  ];
-
+const SliderComponent = ({ onCategorySelect }) => {
+  const [foodTypes, setFoodTypes] = useState([]);
   const sliderRef = useRef(null);
+
+  // Mapa de imágenes según el nombre del tipo de comida
+  const imageMap = {
+    sushi: categoriaSushi,
+    carnes: categoriaCarne,
+    mar: categoriaSalmon,
+    pizza: categoriaPizza,
+    pastas: categoriaPastas,
+    hamburguesas: categoriaHamburguesas,
+    postres: categoriaPostres,
+    desayunos: categoriaDesayunos,
+  };
+
+  // Fetch para obtener los tipos de comida desde el backend
+  useEffect(() => {
+    const fetchFoodTypes = async () => {
+      try {
+        const response = await fetch('https://local-bites-backend.onrender.com/api/food_types/');
+        const data = await response.json();
+        setFoodTypes(data); // Actualiza los tipos de comida
+      } catch (error) {
+        console.error('Error al cargar los tipos de comida:', error);
+      }
+    };
+
+    fetchFoodTypes();
+  }, []);
 
   useEffect(() => {
     const slider = sliderRef.current;
 
-    // Configurar desplazamiento infinito
     const startInfiniteScroll = () => {
       if (slider.scrollLeft >= slider.scrollWidth / 2) {
-        slider.scrollLeft = 0; // Reinicia el scroll cuando llega al final
+        slider.scrollLeft = 0; // Reinicia el scroll al llegar a la mitad
       } else {
         slider.scrollLeft += 1; // Incrementa el desplazamiento
       }
@@ -41,17 +57,23 @@ const SliderComponent = () => {
   }, []);
 
   const handleCategoryClick = (categoria) => {
-    window.postMessage(categoria, '*');
+    onCategorySelect(categoria);
   };
+
+  // Duplicar elementos para el bucle infinito
+  const duplicatedFoodTypes = [...foodTypes, ...foodTypes]; // Duplicamos los elementos
 
   return (
     <div ref={sliderRef} className="slider-filter-css">
       <div className="slide-track-filter-css">
-        {[...slideData, ...slideData].map((slide, index) => (
-          <div key={index} className="slide" onClick={() => handleCategoryClick(slide.categoria)}>
+        {duplicatedFoodTypes.map((foodType, index) => (
+          <div key={index} className="slide" onClick={() => handleCategoryClick(foodType.name)}>
             <button className="sushi-button">
-              <img src={slide.src} alt={slide.text} />
-              <div className="text-overlay">{slide.text}</div>
+              <img
+                src={imageMap[foodType.name.toLowerCase()] || categoriaSushi} // Usa la imagen o una por defecto
+                alt={foodType.name}
+              />
+              <div className="text-overlay">{foodType.name.charAt(0).toUpperCase() + foodType.name.slice(1)}</div>
             </button>
           </div>
         ))}
