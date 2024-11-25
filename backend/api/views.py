@@ -12,7 +12,6 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import FoodTypeSerializer
 from .models import FoodType
 
 @api_view(['POST'])
@@ -83,7 +82,7 @@ def add_restaurant(request):
 @api_view(['GET'])
 def get_food_types(request):
     food_types = FoodType.objects.all()  # Obtenemos todos los tipos de comida
-    serializer = FoodTypeSerializer(food_types, many=True)  # Serializamos los datos
+    serializer = RestauranteSerializer(food_types, many=True)  # Serializamos los datos
     return Response(serializer.data)
 
 class RestauranteListView(APIView):
