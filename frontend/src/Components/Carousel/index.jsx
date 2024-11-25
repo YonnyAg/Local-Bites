@@ -7,33 +7,27 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import tonizzia from '../../assets/CarouselHome/logo_tonizzia.jpg';
-import cafeteria from '../../assets/CarouselHome/logo_cafeteria.jpg';
-import toro_rios from '../../assets/CarouselHome/logo_toro_rios.png';
+import toffer from '../../assets/CarouselHome/logo_toffer.jpg';
+import fuerte from '../../assets/CarouselHome/logo_fuerte.jpg';
 
 const Carousel = () => {
     const slides = [
         {
             img: tonizzia,
             title: 'Tonizzia',
-            subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
-            link: 'tonizzia.html',
-        },
-        {
-            img: cafeteria,
-            title: 'Cafetería Pentukun',
-            subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
+            subtitle: 'Tonizzia restaurante-bar, ofrece carnes a la parrilla y platos de la zona, además de una variada carta de tragos',
             link: '#',
         },
         {
-            img: toro_rios,
-            title: 'Toro de los rios',
-            subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
-            link: 'restaurant1.html',
+            img: toffer,
+            title: 'Cafetería Pentukun',
+            subtitle: 'Toffer restaurante, con gran variedad de platos y almuerzo los días de semana.',
+            link: '#',
         },
         {
-            img: '/imagenes/logo tonizzia.jpg',
-            title: 'Tonizzia',
-            subtitle: 'Una experiencia gastronómica única en San José de la Mariquina.',
+            img: fuerte,
+            title: 'El fuerte',
+            subtitle: ' El fuerte restobar es un local dedicado a la gastronomía fusión con variedad de cervezas artesanales de San José de la Mariquina.',
             link: '#',
         },
     ];

@@ -20,7 +20,7 @@ const AddRestaurant = ({ onClose, setRestaurants }) => {
   useEffect(() => {
     const fetchFoodTypes = async () => {
       try {
-        const response = await fetch("https://local-bites-backend.onrender.com/api/food_types/");
+        const response = await fetch("http://127.0.0.1:8000/api/food_types/");
         if (!response.ok) {
           throw new Error("Error al cargar los tipos de comida");
         }

@@ -9,7 +9,7 @@ const Restaurante = () => {
   const [busqueda, setBusqueda] = useState('');
   const [tipoComida, setTipoComida] = useState(''); // Estado para el tipo de comida
   const [loading, setLoading] = useState(true); // Estado para mostrar el estado de carga
-  const BASE_URL = "https://local-bites-backend.onrender.com"; // Define la URL base del backend
+  const BASE_URL = "http://127.0.0.1:8000/"; // Define la URL base del backend
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
@@ -120,7 +120,7 @@ const Restaurante = () => {
     >
       <div className="flex items-center space-x-4">
         <img
-          src={`${BASE_URL}${restaurante.image}`}
+          src={restaurante.image ? `${BASE_URL}${restaurante.image}` : sushiLogo} // Usa sushiLogo como imagen de respaldo
           alt={restaurante.name}
           className="restaurant-logo w-12 h-12 rounded-full"
         />
@@ -130,7 +130,7 @@ const Restaurante = () => {
         <p className="text-gray-600 mt-4 md:mt-0 md:text-center">
           {truncateText(restaurante.description, 100)}
         </p>
-        <p className="text-gray-600 md:text-center">Tipos de comida: {restaurante.food_types.join(', ')}</p>
+        <p className="text-gray-600 md:text-center">Tipos de comida: {restaurante.food_types_names.join(', ')}</p>
       </div>
       <div className="restaurant-rating text-orange-500 font-semibold text-xl mt-4 md:mt-0 md:text-right">
         {restaurante.rating}

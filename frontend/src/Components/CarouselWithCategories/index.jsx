@@ -7,13 +7,17 @@ import dessertImage from '../../assets/slider/categoria_postres.png';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import sandwich_toffer from '../../assets/CarouselHome/Food/sandwiche-toffer.jpg'
+import sandwich_tonizzia from '../../assets/CarouselHome/Food/sandwiche-tonizzia.jpg'
+import sandwich_fuerte from '../../assets/CarouselHome/Food/sandwiche-fuerte.png'
+
 const categories = [
   {
-    title: 'Sushi',
+    title: 'Sandwiches',
     items: [
-      { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '/restaurant/yu-sushi' },
-      { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '/restaurant/sushi-master' },
-      { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '/restaurant/yu-sushi' },
+      { name: 'Barros Luco', description: 'Carne de res + queso fundido', price: '$7.000', rating: 4.5, image: sandwich_toffer, link: '#' },
+      { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '#' },
+      { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '#' },
       { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '/restaurant/sushi-master' },
       { name: 'Yu Sushi', description: 'Delicious sushi rolls', price: '$15.00', rating: 4.8, image: sushiImage, link: '/restaurant/yu-sushi' },
       { name: 'Sushi Master', description: 'Traditional sushi', price: '$18.00', rating: 4.5, image: sushiImage, link: '/restaurant/sushi-master' },

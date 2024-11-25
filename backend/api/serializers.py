@@ -24,3 +24,8 @@ class RestauranteSerializer(serializers.ModelSerializer):
         restaurante = Restaurante.objects.create(**validated_data)
         restaurante.food_types.set(food_types_data)
         return restaurante
+
+class FoodTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodType
+        fields = ['id', 'name']
