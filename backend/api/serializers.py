@@ -4,14 +4,19 @@ from .models import Restaurante, FoodType
 class FoodTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodType
-        fields = '__all__'  # Incluye todos los campos de FoodType
+        fields = '__all__'
 
 class RestauranteSerializer(serializers.ModelSerializer):
+    # Este campo maneja las relaciones de clave primaria (IDs)
     food_types = serializers.PrimaryKeyRelatedField(
-        many=True,
+        many=True,  # Permite múltiples relaciones
         queryset=FoodType.objects.all()
     )
-    food_types_names = serializers.StringRelatedField(many=True, source='food_types')
+    # Este campo es solo para lectura, para devolver los nombres de los tipos de comida
+    food_types_names = serializers.StringRelatedField(
+        many=True, 
+        source='food_types'
+    )
 
     class Meta:
         model = Restaurante
