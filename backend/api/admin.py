@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurante, FoodType, SocialMedia
+from .models import Restaurante, FoodType, SocialMedia, Profile
 
 # Register your models here.
 @admin.register(FoodType)
@@ -19,3 +19,8 @@ class SocialMediaAdmin(admin.ModelAdmin):
     list_display = ('restaurante', 'instagram', 'facebook', 'whatsapp')  # Campos que se mostrarán en el panel
     search_fields = ('restaurante__name', 'instagram', 'facebook')  # Campos por los que se puede buscar
     list_filter = ('restaurante',)  # Filtros por restaurante
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'profile_picture')  # Campos visibles en la lista
+    search_fields = ('user__username', 'user__email')  # Opciones de búsqueda

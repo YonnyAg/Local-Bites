@@ -4,7 +4,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('register/', views.register_user, name='register_user'),
-    path('login/', views.login_view, name='login'),  # Ruta para la vista login_view
+    path('login/', views.login_view, name='login'),
+    path('api/profile/', views.user_profile, name='user_profile'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -17,6 +18,6 @@ urlpatterns = [
     path('api/contact/', views.contact_message_view, name='contact_message'),
     path('api/contact/<int:id>/', views.contact_message_view),  # Para DELETE
     path('api/csrf/', views.csrf_token_view, name='csrf_token'),
-     path('restaurantes/<int:id>/', views.RestauranteDetail.as_view(), name='restaurante-detail'),
+    path('restaurantes/<int:id>/', views.RestauranteDetail.as_view(), name='restaurante-detail'),
 ]
 

@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Restaurante, FoodType, ContactMessage
+from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model
 from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer
 import requests
 from django.http import JsonResponse
@@ -18,7 +18,6 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 
-
 def csrf_token_view(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
@@ -30,9 +29,9 @@ def register_user(request):
     password = request.data.get('password')
     email = request.data.get('email')
 
-    # Verificar que el username no exista ya
+    # Verificar que el email no exista ya
     if User.objects.filter(email=email).exists():
-        return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Crear el usuario
     user = User.objects.create(
@@ -42,8 +41,11 @@ def register_user(request):
         email=email
     )
 
+    # Crear el perfil del usuario
+    Profile_user_model.objects.create(user=user)
+
     # Retornar una respuesta exitosa
-    return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+    return Response({"message": "User and profile created successfully"}, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
 def login_view(request):
@@ -62,6 +64,38 @@ def login_view(request):
 
     return Response({'error': 'Credenciales inválidas'}, status=401)
 
+#PROFILE LOGIN
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Profile, Comment
+
+@api_view(['GET'])
+def user_profile(request):
+    if not request.user.is_authenticated:
+        return Response({"error": "User not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+    profile_picture = profile.profile_picture.url if profile.profile_picture else None
+
+    comments = Comment.objects.filter(user=user).select_related('restaurant')
+    comments_data = [
+        {
+            "restaurant": comment.restaurant.name,
+            "text": comment.text,
+            "rating": comment.rating,
+            "created_at": comment.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        for comment in comments
+    ]
+
+    profile_data = {
+        "username": user.first_name,
+        "email": user.username,
+        "profilePicture": profile_picture,
+        "comments": comments_data,
+    }
+    return Response(profile_data)
 
 def google_reviews(request, restaurante_id):
     # Busca el restaurante por su ID

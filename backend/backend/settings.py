@@ -171,6 +171,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",  # Frontend local
 ]
 
+LOGIN_URL = 'http://localhost:5173/login'
 
 
 MEDIA_URL = '/media/'  # URL base para acceder a archivos multimedia

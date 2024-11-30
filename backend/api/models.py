@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class FoodType(models.Model):
@@ -70,7 +71,40 @@ class ContactMessage(models.Model):
         verbose_name = "Mensaje de Contacto"
         verbose_name_plural = "Mensajes de Contacto"
 
+# PROFILE USER
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile"
+    )
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/",
+        null=True,
+        blank=True,
+        verbose_name="Profile Picture"
+    )
 
+    def __str__(self):
+        return f"Profile of {self.user.username}"
+
+class Comment(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        verbose_name="User"
+    )
+    restaurant = models.ForeignKey(
+        Restaurante,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        verbose_name="Restaurant"
+    )
+    text = models.TextField(max_length=1000, verbose_name="Comment Text")
+    rating = models.DecimalField(max_digits=2, decimal_places=1, verbose_name="Rating")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.restaurant.name}"
 
 
 
