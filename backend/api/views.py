@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model
@@ -96,6 +96,37 @@ def user_profile(request):
         "comments": comments_data,
     }
     return Response(profile_data)
+
+@api_view(['PUT'])
+@parser_classes([MultiPartParser, FormParser])  # Permitir archivos y datos de formulario
+def update_profile(request):
+    if not request.user.is_authenticated:
+        return Response({"error": "User not authenticated"}, status=401)
+    
+    user = request.user
+    profile = user.profile  # Obtener el perfil relacionado
+    
+    # Actualizar nombre de usuario
+    username = request.data.get('username')
+    if username:
+        user.first_name = username
+        user.save()
+
+    # Actualizar imagen de perfil
+    profile_picture = request.FILES.get('profilePicture')
+    if profile_picture:
+        profile.profile_picture = profile_picture
+        profile.save()
+
+    # Retornar los datos actualizados
+    profile_data = {
+        "username": user.first_name,
+        "email": user.email,
+        "profilePicture": profile.profile_picture.url if profile.profile_picture else None,
+    }
+
+    return Response(profile_data, status=200)
+
 
 def google_reviews(request, restaurante_id):
     # Busca el restaurante por su ID

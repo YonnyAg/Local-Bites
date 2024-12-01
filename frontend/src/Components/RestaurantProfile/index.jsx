@@ -126,9 +126,8 @@ const ProfilePage = () => {
       <ReviewSection restauranteId={restaurantInfo.id} />
 
       {/* Botón flotante de WhatsApp */}
-            <a
-        href={restaurantInfo.whatsapp}
-        target="_blank"
+      <a
+        href={restaurantInfo?.whatsapp || '#'}
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition duration-300 flex items-center space-x-2"
       >
