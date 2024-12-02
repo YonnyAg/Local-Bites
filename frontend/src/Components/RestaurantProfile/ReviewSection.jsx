@@ -55,39 +55,48 @@ const ReviewSection = ({ restauranteId }) => {
     // Función para agregar un nuevo comentario
     const addComment = async (e) => {
         e.preventDefault();
+
+        // Verificar autenticación
+        if (!isAuthenticated()) {
+            setShowPopup(true); // Muestra el pop-up si no está autenticado
+            return;
+        }
+
+        // Validar que haya un comentario y calificación
         if (!newComment || !rating) {
-          alert("Debes ingresar un comentario y una calificación.");
-          return;
+            alert("Debes ingresar un comentario y una calificación.");
+            return;
         }
-      
+
         try {
-          const token = localStorage.getItem("accessToken");
-          const response = await fetch("https://local-bites-backend.onrender.com/api/api/comments/", {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              restaurant_id: restauranteId, // ID del restaurante visitado
-              text: newComment,
-              rating: rating, // Calificación
-            }),
-          });
-      
-          if (response.ok) {
-            const newReview = await response.json();
-            setSiteReviews((prev) => [...prev, newReview]); // Agregar comentario a la lista
-            setNewComment(""); // Reiniciar el input del comentario
-            setRating(0); // Reiniciar la calificación
-          } else {
-            throw new Error("No se pudo agregar el comentario.");
-          }
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch('https://local-bites-backend.onrender.com/api/api/comments/', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    restaurant_id: restauranteId, // ID del restaurante
+                    text: newComment,
+                    rating: rating, // Calificación
+                }),
+            });
+
+            if (response.ok) {
+                const newReview = await response.json();
+                setSiteReviews((prev) => [...prev, newReview]); // Agregar comentario a la lista
+                setNewComment(''); // Reiniciar el input del comentario
+                setRating(0); // Reiniciar la calificación
+            } else {
+                throw new Error('No se pudo agregar el comentario.');
+            }
         } catch (error) {
-          console.error("Error adding comment:", error);
-          alert("Ocurrió un error. Intenta más tarde.");
+            console.error('Error adding comment:', error);
+            alert('Ocurrió un error. Intenta más tarde.');
         }
-      };      
+    };
+
     useEffect(() => {
         if (restauranteId) {
             fetchGoogleReviews();
@@ -123,29 +132,24 @@ const ReviewSection = ({ restauranteId }) => {
             </div>
 
             {/* Comentarios del sitio web */}
-            <div>
+            <div className="bg-white p-4 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Opiniones del Sitio Web</h2>
                 {loadingSite ? (
                     <p>Cargando reseñas del sitio web...</p>
                 ) : siteReviews.length > 0 ? (
                     siteReviews.map((review, index) => (
                         <div key={index} className="border-b pb-4 mb-4 flex items-start">
-                            {/* Foto del usuario */}
                             <img
                                 src={review.user.profile_picture || 'https://via.placeholder.com/50'}
                                 alt={review.user.username}
                                 className="w-12 h-12 rounded-full mr-4"
                             />
                             <div>
-                                {/* Nombre del usuario */}
                                 <p className="font-semibold text-gray-800">{review.user.username}</p>
-                                {/* Calificación */}
                                 <div className="text-yellow-500">
                                     {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                                 </div>
-                                {/* Comentario */}
                                 <p className="text-gray-700">{review.text}</p>
-                                {/* Fecha */}
                                 <p className="text-gray-500 text-sm mt-2">
                                     {new Date(review.created_at).toLocaleDateString()}
                                 </p>
@@ -155,8 +159,6 @@ const ReviewSection = ({ restauranteId }) => {
                 ) : (
                     <p className="text-gray-500">No hay reseñas disponibles para este restaurante en el sitio web.</p>
                 )}
-
-
 
                 {/* Formulario para agregar comentarios */}
                 <form onSubmit={addComment} className="mt-4">

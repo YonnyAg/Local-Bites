@@ -33,4 +33,5 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'restaurant__name', 'text')  # Campos para la búsqueda
     ordering = ('-created_at',)  # Ordenar por la fecha de creación (más reciente primero)
     readonly_fields = ('created_at',)  # Campo de solo lectura
+    
 
