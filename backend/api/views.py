@@ -1,11 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework import status
-from rest_framework.decorators import api_view, parser_classes
+from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model
-from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer
+from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model, Comment, Restaurante
+from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer, CommentSerializer
 import requests
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -17,6 +17,7 @@ import json
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
+from rest_framework.permissions import IsAuthenticated
 
 def csrf_token_view(request):
     token = get_token(request)
@@ -97,6 +98,32 @@ def user_profile(request):
     }
     return Response(profile_data)
 
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])  # Solo usuarios autenticados pueden acceder
+def user_comments(request):
+    if request.method == 'GET':
+        # Obtener los comentarios del usuario autenticado
+        comments = Comment.objects.filter(user=request.user)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data, status=200)
+
+    elif request.method == 'POST':
+        # Crear un nuevo comentario
+        data = request.data
+        try:
+            restaurant = Restaurante.objects.get(id=data.get('restaurant_id'))
+            new_comment = Comment.objects.create(
+                user=request.user,
+                restaurant=restaurant,
+                text=data.get('text'),
+                rating=data.get('rating'),
+            )
+            return Response(CommentSerializer(new_comment).data, status=201)
+        except Restaurante.DoesNotExist:
+            return Response({'error': 'Restaurant not found'}, status=404)
+
+
+
 @api_view(['PUT'])
 @parser_classes([MultiPartParser, FormParser])  # Permitir archivos y datos de formulario
 def update_profile(request):
@@ -144,6 +171,32 @@ def google_reviews(request, restaurante_id):
     response = requests.get(url)
     data = response.json()
     return JsonResponse(data)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+@api_view(['GET'])
+def comments_by_restaurant(request, restaurant_id):
+    try:
+        comments = Comment.objects.filter(restaurant__id=restaurant_id)
+        data = [
+            {
+                "id": comment.id,
+                "user": {
+                    "username": comment.user.username,
+                    "profile_picture": comment.user.profile.profile_picture.url if comment.user.profile.profile_picture else None,
+                },
+                "text": comment.text,
+                "rating": comment.rating,
+                "created_at": comment.created_at,
+            }
+            for comment in comments
+        ]
+        return Response(data, status=200)
+    except Restaurante.DoesNotExist:
+        return Response({"error": "Restaurant not found"}, status=404)
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

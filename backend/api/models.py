@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class FoodType(models.Model):
@@ -86,6 +87,11 @@ class Profile(models.Model):
     def __str__(self):
         return f"Profile of {self.user.username}"
 
+def validate_rating(value):
+    """Valida que la calificación esté entre 1 y 5."""
+    if value < 1 or value > 5:
+        raise ValidationError('Rating must be between 1 and 5.')
+
 class Comment(models.Model):
     user = models.ForeignKey(
         User,
@@ -94,19 +100,30 @@ class Comment(models.Model):
         verbose_name="User"
     )
     restaurant = models.ForeignKey(
-        Restaurante,
+        'Restaurante',  # Usa el nombre del modelo como string para evitar conflictos de importación
         on_delete=models.CASCADE,
         related_name="comments",
         verbose_name="Restaurant"
     )
     text = models.TextField(max_length=1000, verbose_name="Comment Text")
-    rating = models.DecimalField(max_digits=2, decimal_places=1, verbose_name="Rating")
+    rating = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        verbose_name="Rating",
+        validators=[validate_rating]  # Aplica la validación personalizada
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")  # Campo opcional para registrar ediciones
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.restaurant.name}"
 
+    def stars(self):
+        """Genera una representación visual de las estrellas."""
+        return '★' * int(self.rating) + '☆' * (5 - int(self.rating))
 
-
-
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+        ordering = ['-created_at'] 
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Restaurante, FoodType, SocialMedia
+from .models import Restaurante, FoodType, SocialMedia, Comment
 
 class SocialMediaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,4 +36,12 @@ class FoodTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodType
         fields = ['id', 'name']
+
+class CommentSerializer(serializers.ModelSerializer):
+    restaurant_name = serializers.CharField(source='restaurant.name', read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'restaurant_name', 'text', 'rating', 'created_at']
+
 

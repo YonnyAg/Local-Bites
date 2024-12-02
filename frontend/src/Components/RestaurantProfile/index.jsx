@@ -5,75 +5,7 @@ import GoogleMapComponent from './GoogleMap';
 import RestaurantInfo from '../RestaurantProfile/Info/RestaurantInfo';
 import Banner from '../RestaurantProfile/Banner/Banner';
 import Loader from '../../Components/Loaders/LoaderLogin'; // Asegúrate de importar tu loader
-
-const ReviewSection = ({ restauranteId }) => {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchReviews = async () => {
-    try {
-      const response = await fetch(`https://local-bites-backend.onrender.com/api/google-reviews/${restauranteId}/`);
-      if (!response.ok) {
-        throw new Error('Error al obtener las opiniones.');
-      }
-      const data = await response.json();
-      setReviews(data.result.reviews || []);
-    } catch (error) {
-      setError('No se pudieron cargar las opiniones.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (restauranteId) {
-      fetchReviews();
-    }
-  }, [restauranteId]);
-
-  if (loading) {
-    return null; // El loader principal se encargará de esto
-  }
-
-  if (error) {
-    return <p className="text-center text-red-500">{error}</p>;
-  }
-
-  return (
-    <div className="mt-8 p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Opiniones de Google</h2>
-      <div className="space-y-6">
-        {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div
-              key={index}
-              className="p-4 bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="flex items-center mb-4">
-                <img
-                  src={review.profile_photo_url || 'https://via.placeholder.com/50'}
-                  alt={review.author_name}
-                  className="w-12 h-12 rounded-full shadow-md mr-4"
-                />
-                <div>
-                  <p className="font-bold text-gray-800">{review.author_name}</p>
-                  <p className="text-yellow-500 text-sm">
-                    {'★'.repeat(Math.round(review.rating))}
-                    {'☆'.repeat(5 - Math.round(review.rating))}
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-600">{review.text}</p>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">No hay opiniones disponibles para este restaurante.</p>
-        )}
-      </div>
-    </div>
-  );
-};
+import ReviewSection from './ReviewSection';
 
 const ProfilePage = () => {
   const { id } = useParams(); // Obtiene el ID del restaurante desde la URL

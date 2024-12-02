@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurante, FoodType, SocialMedia, Profile
+from .models import Restaurante, FoodType, SocialMedia, Profile, Comment
 
 # Register your models here.
 @admin.register(FoodType)
@@ -24,3 +24,13 @@ class SocialMediaAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'profile_picture')  # Campos visibles en la lista
     search_fields = ('user__username', 'user__email')  # Opciones de búsqueda
+
+# Clase personalizada para el modelo Comment
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'restaurant', 'rating', 'created_at')  # Campos que se mostrarán en la lista
+    list_filter = ('rating', 'created_at')  # Filtros en la barra lateral
+    search_fields = ('user__username', 'restaurant__name', 'text')  # Campos para la búsqueda
+    ordering = ('-created_at',)  # Ordenar por la fecha de creación (más reciente primero)
+    readonly_fields = ('created_at',)  # Campo de solo lectura
+
