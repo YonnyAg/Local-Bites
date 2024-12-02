@@ -145,7 +145,7 @@ const ReviewSection = ({ restauranteId }) => {
                                 className="w-12 h-12 rounded-full mr-4"
                             />
                             <div>
-                                <p className="font-semibold text-gray-800">{review.user.username}</p>
+                                <p className="font-semibold text-gray-800">{review.user.first_name || 'Usuario Anónimo'}</p>
                                 <div className="text-yellow-500">
                                     {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
                                 </div>

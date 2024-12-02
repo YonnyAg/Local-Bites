@@ -185,6 +185,7 @@ def comments_by_restaurant(request, restaurant_id):
                 "id": comment.id,
                 "user": {
                     "username": comment.user.username,
+                    "first_name": comment.user.first_name,  # Añade el first_name aquí
                     "profile_picture": comment.user.profile.profile_picture.url if comment.user.profile.profile_picture else None,
                 },
                 "text": comment.text,
@@ -196,6 +197,7 @@ def comments_by_restaurant(request, restaurant_id):
         return Response(data, status=200)
     except Restaurante.DoesNotExist:
         return Response({"error": "Restaurant not found"}, status=404)
+
 
 
 from rest_framework.decorators import api_view
