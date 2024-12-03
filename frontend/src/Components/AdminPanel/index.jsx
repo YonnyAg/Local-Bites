@@ -3,6 +3,7 @@ import Sliderbar from "./Sliderbar";
 import RestaurantList from "./RestaurantList"; 
 import ContactRequests from "./ContactRequest";
 import CategoryList from "./CategoryList";
+import TrafficChart from "./Log/TrafficChart";
 
 const AdminPanel = () => {
   const [active, setActive] = useState("restaurantes");
@@ -22,6 +23,9 @@ const AdminPanel = () => {
         )}
         {active === "categorias" && (
           <CategoryList />
+        )}
+        {active === "logview" && (
+          <TrafficChart />
         )}
       </div>
     </div>

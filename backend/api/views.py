@@ -355,8 +355,9 @@ def traffic_analysis(request):
         daily_traffic = (
             TrafficRecord.objects.filter(timestamp__date__gte=last_week)
             .extra({"day": "date(timestamp)"})
-            .values("day")
+            .values("day", "url")  # Incluir la URL en el análisis
             .annotate(visits=Count("id"))
+            .order_by("day", "-visits")  # Ordenar por día y luego por visitas descendentes
         )
 
         return JsonResponse(list(daily_traffic), safe=False)

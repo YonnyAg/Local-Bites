@@ -3,10 +3,15 @@ import Layout from "../../Components/Layout";
 import SliderComponent from "../../Components/SliderFilter";
 import Restaurants from "../../Components/RestaurantsList";
 import LoaderLogin from "../../Components/Loaders/LoaderLogin"; // Importa tu componente de loader
+import logVisit from '../../Components/LogVisit';
 
 function Premises() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true); // Estado para el loader
+
+  useEffect(() => {
+    logVisit(); // Llama a logVisit al cargar la página
+  }, []); // [] asegura que solo se ejecuta una vez
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
