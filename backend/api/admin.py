@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurante, FoodType, SocialMedia, Profile, Comment
+from .models import Restaurante, FoodType, SocialMedia, Profile, Comment, TrafficRecord
 
 # Register your models here.
 @admin.register(FoodType)
@@ -34,4 +34,15 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)  # Ordenar por la fecha de creación (más reciente primero)
     readonly_fields = ('created_at',)  # Campo de solo lectura
     
+@admin.register(TrafficRecord)
+class TrafficRecordAdmin(admin.ModelAdmin):
+    list_display = ('id', 'url', 'user_agent', 'timestamp')  # Columnas a mostrar
+    list_filter = ('timestamp', 'url')  # Filtros laterales por fecha y URL
+    search_fields = ('url', 'user_agent')  # Campo de búsqueda
+    ordering = ('-timestamp',)  # Orden descendente por fecha
+    actions = ['delete_selected']  # Habilitar acción de eliminar
 
+    def delete_selected(self, request, queryset):
+        queryset.delete()
+        self.message_user(request, "Los registros seleccionados han sido eliminados.")
+    delete_selected.short_description = "Eliminar registros seleccionados"

@@ -10,7 +10,7 @@ const getCSRFToken = () => {
 const logVisit = async (url) => {
     const csrfToken = getCSRFToken();
     try {
-        await fetch("https://local-bites-backend.onrender.com/api/traffic-analysis/", {
+        await fetch("https://local-bites-sepia.vercel.app/api/traffic-analysis/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

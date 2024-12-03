@@ -333,7 +333,6 @@ def contact_message_view(request, id=None):
 # ANALYTICS
 from django.utils.timezone import now, timedelta
 from django.db.models import Count
-
 @csrf_exempt
 def traffic_analysis(request):
     if request.method == 'POST':
@@ -352,17 +351,37 @@ def traffic_analysis(request):
         today = now().date()
         last_week = today - timedelta(days=7)
 
+        # Agrupar visitas por día y URL
         daily_traffic = (
             TrafficRecord.objects.filter(timestamp__date__gte=last_week)
             .extra({"day": "date(timestamp)"})
-            .values("day", "url")  # Incluir la URL en el análisis
+            .values("day", "url")
             .annotate(visits=Count("id"))
-            .order_by("day", "-visits")  # Ordenar por día y luego por visitas descendentes
+            .order_by("day", "-visits")
         )
 
-        return JsonResponse(list(daily_traffic), safe=False)
+        # Añadir nombres amigables a las URLs
+        formatted_data = []
+        for record in daily_traffic:
+            url = record["url"]
+            day = record["day"]
+            visits = record["visits"]
+
+            # Crear un objeto temporal para usar get_friendly_name
+            traffic_record = TrafficRecord(url=url)
+            friendly_name = traffic_record.get_friendly_name()
+
+            formatted_data.append({
+                "day": day,
+                "url": url,
+                "friendly_name": friendly_name,
+                "visits": visits,
+            })
+
+        return JsonResponse(formatted_data, safe=False)
 
     else:
         return JsonResponse({"error": "Método no permitido"}, status=405)
+
 
 

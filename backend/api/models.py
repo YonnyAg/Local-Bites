@@ -128,6 +128,7 @@ class Comment(models.Model):
         ordering = ['-created_at'] 
 
 # MODELO FOR ANALYTICS
+from django.core.exceptions import ObjectDoesNotExist
 class TrafficRecord(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     url = models.URLField(max_length=500)
@@ -136,5 +137,24 @@ class TrafficRecord(models.Model):
 
     def __str__(self):
         return f"Visit at {self.timestamp} - {self.url}"
+
+    def get_friendly_name(self):
+        # Manejo del Home
+        if self.url == "https://local-bites-sepia.vercel.app/":
+            return "Home"
+
+        # Manejo de URLs de restaurantes
+        if "restaurante/" in self.url:
+            try:
+                # Extrae el ID del restaurante desde la URL
+                restaurant_id = self.url.split("/")[-1]
+                restaurante = Restaurante.objects.get(id=restaurant_id)
+                return restaurante.name
+            except (ValueError, ObjectDoesNotExist):
+                return f"Restaurante desconocido ({restaurant_id})"
+
+        # Otras URLs desconocidas
+        return "Página desconocida"
+
 
 
