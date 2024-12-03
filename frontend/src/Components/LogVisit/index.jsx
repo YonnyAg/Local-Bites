@@ -10,7 +10,7 @@ const getCSRFToken = () => {
 const logVisit = async (url) => {
     const csrfToken = getCSRFToken();
     try {
-        await fetch("http://127.0.0.1:8000/api/traffic-analysis/", {
+        await fetch("https://local-bites-backend.onrender.com/api/traffic-analysis/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
