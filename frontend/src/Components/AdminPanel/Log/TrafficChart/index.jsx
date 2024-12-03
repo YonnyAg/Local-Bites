@@ -5,7 +5,7 @@ const TrafficPieChart = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        fetch("https://local-bites-sepia.vercel.app/api/traffic-analysis/")
+        fetch("https://local-bites-backend.onrender.com/api/traffic-analysis/")
             .then((response) => response.json())
             .then((data) => {
                 // Utiliza los datos tal como vienen del backend
