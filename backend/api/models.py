@@ -127,3 +127,14 @@ class Comment(models.Model):
         verbose_name_plural = "Comments"
         ordering = ['-created_at'] 
 
+# MODELO FOR ANALYTICS
+class TrafficRecord(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    url = models.URLField(max_length=500)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Visit at {self.timestamp} - {self.url}"
+
+

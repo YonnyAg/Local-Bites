@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model, Comment, Restaurante
+from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model, Comment, Restaurante, TrafficRecord
 from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer, CommentSerializer
 import requests
 from django.http import JsonResponse
@@ -329,4 +329,39 @@ def contact_message_view(request, id=None):
             return JsonResponse({'error': 'Mensaje no encontrado'}, status=404)
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+# ANALYTICS
+from django.utils.timezone import now, timedelta
+from django.db.models import Count
+
+@csrf_exempt
+def traffic_analysis(request):
+    if request.method == 'POST':
+        # Registrar nuevos datos
+        data = json.loads(request.body)
+        url = data.get('url')
+        user_agent = data.get('user_agent')
+
+        # Guardar el registro en la base de datos
+        TrafficRecord.objects.create(url=url, user_agent=user_agent)
+
+        return JsonResponse({"message": "Log registrado exitosamente"}, status=201)
+
+    elif request.method == 'GET':
+        # Analizar datos existentes
+        today = now().date()
+        last_week = today - timedelta(days=7)
+
+        daily_traffic = (
+            TrafficRecord.objects.filter(timestamp__date__gte=last_week)
+            .extra({"day": "date(timestamp)"})
+            .values("day")
+            .annotate(visits=Count("id"))
+        )
+
+        return JsonResponse(list(daily_traffic), safe=False)
+
+    else:
+        return JsonResponse({"error": "Método no permitido"}, status=405)
+
 
