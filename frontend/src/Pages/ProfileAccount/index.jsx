@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import Layout  from "../../Components/Layout"
 import Profile from "../../Components/ProfileAccount"
 import logVisit from '../../Components/LogVisit';

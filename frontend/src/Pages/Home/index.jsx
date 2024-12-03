@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import Layout  from "../../Components/Layout"
 import Carousel from '../../Components/Carousel';
 import CarouselWithCategories from '../../Components/CarouselWithCategories';

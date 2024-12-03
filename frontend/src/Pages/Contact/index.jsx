@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import Layout  from "../../Components/Layout"
 import Contact from "../../Components/FormContact"
 import logVisit from '../../Components/LogVisit';

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
 import SliderComponent from "../../Components/SliderFilter";
 import Restaurants from "../../Components/RestaurantsList";
