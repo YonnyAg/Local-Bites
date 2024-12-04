@@ -10,7 +10,7 @@ const UserAnalytics = () => {
     });
 
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/api/user_analytics/")
+        fetch("https://local-bites-backend.onrender.com/api/user_analytics/")
             .then((response) => response.json())
             .then((data) => {
                 console.log("Datos recibidos:", data);

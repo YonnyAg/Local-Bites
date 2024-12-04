@@ -89,7 +89,7 @@ const UserAccount = () => {
         formData.append("profilePicture", newProfilePicture);
       }
   
-      const response = await fetch("http://127.0.0.1:8000/api/api/profile/update/", {
+      const response = await fetch("https://local-bites-backend.onrender.com/api/api/profile/update/", {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`, // Autorización con el token de acceso
