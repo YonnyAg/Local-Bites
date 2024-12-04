@@ -146,6 +146,12 @@ class TrafficRecord(models.Model):
         "https://local-bites-sepia.vercel.app/contacto": "Contacto",
         "https://local-bites-sepia.vercel.app/perfi": "Perfil",
         "https://local-bites-sepia.vercel.app/login": "Login",
+        #URL HOST
+        "http://localhost:5173/": "Home",
+        "http://localhost:5173/locales": "Locales Host",
+        "http://localhost:5173/contacto": "Contacto Host",
+        "http://localhost:5173/perfi": "Perfil Host",
+        "http://localhost:5173/ogin": "Login Host",
     }
 
     def save(self, *args, **kwargs):
