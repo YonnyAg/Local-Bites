@@ -143,9 +143,15 @@ class TrafficRecord(models.Model):
     URL_MAPPINGS = {
         "https://local-bites-sepia.vercel.app/": "Home",
         "https://local-bites-sepia.vercel.app/locales": "Locales",
-        "https://local-bites-sepia.vercel.app/contacto": "Sobre Nosotros",
-        "https://local-bites-sepia.vercel.app/perfi": "Sobre Nosotros",
+        "https://local-bites-sepia.vercel.app/contacto": "Contacto",
+        "https://local-bites-sepia.vercel.app/perfi": "Perfil",
         "https://local-bites-sepia.vercel.app/login": "Login",
+        # TEST IN LOCALHOST
+        "http://localhost:5173/": "Home",
+        "http://localhost:5173/locales": "Locales",
+        "http://localhost:5173/contacto": "Contacto",
+        "http://localhost:5173/perfi": "Perfil",
+        "http://localhost:5173/login": "Login",
     }
 
     def save(self, *args, **kwargs):
