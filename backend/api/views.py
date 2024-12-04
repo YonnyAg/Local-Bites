@@ -383,5 +383,32 @@ def traffic_analysis(request):
     else:
         return JsonResponse({"error": "Método no permitido"}, status=405)
 
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.utils.timezone import now, timedelta
+
+from django.contrib.auth.models import User
+from django.utils.timezone import now, timedelta
+
+def user_analytics(request):
+    today = now().date()
+    last_week = today - timedelta(days=6)
+
+    # Usuarios registrados por día en la última semana
+    weekly_data = []
+    for i in range(7):
+        day = today - timedelta(days=i)
+        count = User.objects.filter(date_joined__date=day).count()
+        weekly_data.append({
+            "date": day.strftime("%Y-%m-%d"),
+            "registrations": count,
+        })
+
+    return JsonResponse({
+        "total_users": User.objects.count(),
+        "this_week": User.objects.filter(date_joined__date__gte=last_week).count(),
+        "weekly_data": weekly_data[::-1]  # Reversa para mostrar en orden cronológico
+    })
+
 
 

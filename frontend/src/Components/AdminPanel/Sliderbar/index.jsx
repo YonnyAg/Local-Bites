@@ -22,7 +22,7 @@ const Sliderbar = ({ active, setActive }) => {
 
   const logLinks = [
     { name: "Log de URL", icon: GlobeAltIcon, id: "logview" },
-    { name: "Log de Usuarios", icon: UserIcon, id: "log-usuarios" },
+    { name: "Log de Usuarios", icon: UserIcon, id: "userview" },
     { name: "Log de Errores", icon: ExclamationCircleIcon, id: "log-errores" },
   ];
 

@@ -25,5 +25,6 @@ urlpatterns = [
     path('restaurantes/<int:id>/', views.RestauranteDetail.as_view(), name='restaurante-detail'),
     # ANALYTICS
     path('traffic-analysis/', views.traffic_analysis, name='traffic_analysis'),
+    path('user_analytics/', views.user_analytics, name='user_analytics'),
 ]
 

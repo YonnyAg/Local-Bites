@@ -4,28 +4,43 @@ import RestaurantList from "./RestaurantList";
 import ContactRequests from "./ContactRequest";
 import CategoryList from "./CategoryList";
 import TrafficChart from "./Log/TrafficChart";
+import UserAnalytics from "./Log/UserRegister";
 
 const AdminPanel = () => {
   const [active, setActive] = useState("restaurantes");
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Sidebar */}
       <Sliderbar active={active} setActive={setActive} />
 
       {/* Main Content */}
-      <div className="flex-1 p-6 bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gray-100">
+        {/* Renderizar el contenido basado en el estado activo */}
         {active === "restaurantes" && (
-          <RestaurantList /> // Renderiza la lista de restaurantes
+          <div className="flex-1 overflow-auto">
+            <RestaurantList />
+          </div>
         )}
         {active === "contacto" && (
-          <ContactRequests />
+          <div className="flex-1 overflow-auto">
+            <ContactRequests />
+          </div>
         )}
         {active === "categorias" && (
-          <CategoryList />
+          <div className="flex-1 overflow-auto">
+            <CategoryList />
+          </div>
         )}
         {active === "logview" && (
-          <TrafficChart />
+          <div className="flex-1 overflow-auto">
+            <TrafficChart />
+          </div>
+        )}
+        {active === "userview" && (
+          <div className="flex-1 overflow-auto">
+            <UserAnalytics />
+          </div>
         )}
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-import { ChartBarIcon, HomeIcon, PhoneIcon, LoginIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { ChartBarIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/solid";
 
 const TrafficPieChart = () => {
     const [data, setData] = useState([]);
@@ -13,20 +13,14 @@ const TrafficPieChart = () => {
             });
     }, []);
 
-    // Colores para las categorías
+    // Colores para el gráfico
     const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff6f61", "#8dd1e1"];
 
-    // Calcular totales
+    // Calcular totales (visitas totales y categorías principales)
     const totalVisits = data.reduce((acc, curr) => acc + curr.visits, 0);
-
-    // Filtrar las categorías principales (Home, Locales, etc.)
-    const pageCategories = data.filter(
-        (item) => ["Home", "Locales", "Contacto", "Login"].includes(item.friendly_name)
-    );
-
-    // Filtrar restaurantes
-    const restaurantVisits = data.filter(
-        (item) => !["Home", "Locales", "Contacto", "Login"].includes(item.friendly_name)
+    const topCategory = data.reduce((prev, current) =>
+        prev.visits > current.visits ? prev : current,
+        { friendly_name: "N/A", visits: 0 }
     );
 
     return (
@@ -63,37 +57,19 @@ const TrafficPieChart = () => {
                     <span className="ml-auto text-lg">{totalVisits}</span>
                 </div>
 
-                {/* Categorías principales */}
-                {pageCategories.map((category, index) => (
-                    <div
-                        key={index}
-                        className={`flex items-center p-4 rounded w-full mb-2 ${
-                            index % 2 === 0 ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
-                        }`}
-                    >
-                        {category.friendly_name === "Home" && <HomeIcon className="h-6 w-6 mr-4" />}
-                        {category.friendly_name === "Locales" && <MapPinIcon className="h-6 w-6 mr-4" />}
-                        {category.friendly_name === "Contacto" && <PhoneIcon className="h-6 w-6 mr-4" />}
-                        {category.friendly_name === "Login" && <LoginIcon className="h-6 w-6 mr-4" />}
-                        <span className="font-semibold">{category.friendly_name}:</span>
-                        <span className="ml-auto text-lg">{category.visits} visitas</span>
-                    </div>
-                ))}
+                {/* Categoría más visitada */}
+                <div className="flex items-center bg-green-100 text-green-800 p-4 rounded w-full mb-2">
+                    <MapPinIcon className="h-6 w-6 mr-4" />
+                    <span className="font-semibold">Categoría más visitada:</span>
+                    <span className="ml-auto text-lg">{topCategory.friendly_name}</span>
+                </div>
 
-                {/* Restaurantes */}
-                {restaurantVisits.length > 0 && (
-                    <div className="w-full mt-4">
-                        <h3 className="text-lg font-bold mb-2 text-gray-700">Visitas por Restaurantes</h3>
-                        <ul className="bg-gray-100 p-4 rounded shadow">
-                            {restaurantVisits.map((restaurant, index) => (
-                                <li key={index} className="flex justify-between py-1">
-                                    <span>{restaurant.friendly_name}</span>
-                                    <span className="font-semibold">{restaurant.visits} visitas</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
+                {/* Detalle de la categoría más visitada */}
+                <div className="flex items-center bg-yellow-100 text-yellow-800 p-4 rounded w-full">
+                    <UserIcon className="h-6 w-6 mr-4" />
+                    <span className="font-semibold">Visitas de {topCategory.friendly_name}:</span>
+                    <span className="ml-auto text-lg">{topCategory.visits}</span>
+                </div>
             </div>
         </div>
     );
