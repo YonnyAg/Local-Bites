@@ -128,33 +128,51 @@ class Comment(models.Model):
         ordering = ['-created_at'] 
 
 # MODELO FOR ANALYTICS
+import re
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+
 class TrafficRecord(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     url = models.URLField(max_length=500)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_agent = models.TextField(blank=True, null=True)
+    restaurant = models.ForeignKey('Restaurante', null=True, blank=True, on_delete=models.SET_NULL)
 
-    def __str__(self):
-        return f"Visit at {self.timestamp} - {self.url}"
+    # Diccionario para las URLs estáticas
+    URL_MAPPINGS = {
+        "https://local-bites-sepia.vercel.app/": "Home",
+        "https://local-bites-sepia.vercel.app/locales": "Locales",
+        "https://local-bites-sepia.vercel.app/contacto": "Sobre Nosotros",
+        "https://local-bites-sepia.vercel.app/perfi": "Sobre Nosotros",
+        "https://local-bites-sepia.vercel.app/login": "Login",
+    }
+
+    def save(self, *args, **kwargs):
+        # Primero, maneja las URLs estáticas usando el diccionario
+        if self.url in self.URL_MAPPINGS:
+            self.restaurant = None  # No hay restaurante asociado para estas URLs
+
+        # Maneja las URLs dinámicas para restaurantes
+        elif "restaurante/" in self.url:
+            try:
+                # Extrae el ID del restaurante de la URL
+                restaurant_id = re.search(r'restaurante/(\d+)', self.url).group(1)
+                self.restaurant = Restaurante.objects.get(id=restaurant_id)
+            except (AttributeError, ObjectDoesNotExist):
+                self.restaurant = None  # Si no encuentra un ID válido, no asocia nada
+
+        # Si no coincide con nada conocido, guarda como está
+        super().save(*args, **kwargs)
 
     def get_friendly_name(self):
-        # Manejo del Home
-        if self.url == "https://local-bites-sepia.vercel.app/":
-            return "Home"
-
-        # Manejo de URLs de restaurantes
-        if "restaurante/" in self.url:
-            try:
-                # Extrae el ID del restaurante desde la URL
-                restaurant_id = self.url.split("/")[-1]
-                restaurante = Restaurante.objects.get(id=restaurant_id)
-                return restaurante.name
-            except (ValueError, ObjectDoesNotExist):
-                return f"Restaurante desconocido ({restaurant_id})"
-
-        # Otras URLs desconocidas
+        # Devuelve un nombre amigable para mostrar
+        if self.url in self.URL_MAPPINGS:
+            return self.URL_MAPPINGS[self.url]
+        if self.restaurant:
+            return self.restaurant.name
         return "Página desconocida"
+
 
 
 
