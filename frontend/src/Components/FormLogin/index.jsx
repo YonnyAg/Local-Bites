@@ -6,6 +6,9 @@ import ErrorNotification from './ErrorNotification';
 import Loader from '../Loaders/LoaderLogin';
 import './FormLogin.css';
 
+// Variable de entorno para la URL base del servidor
+const SERVER_URL = 'https://local-bites-backend.onrender.com/api';
+
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -16,7 +19,7 @@ const LoginRegister = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Contexto de autenticación
+  const { login } = useContext(AuthContext);
 
   const toggleForm = () => {
     setIsLogin(!isLogin);
@@ -52,7 +55,7 @@ const LoginRegister = () => {
     }
     setIsLoading(true);
     try {
-      const response = await fetch('https://local-bites-backend.onrender.com/api/register/', {
+      const response = await fetch(`${SERVER_URL}/register/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,29 +90,29 @@ const LoginRegister = () => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('https://local-bites-backend.onrender.com/api/api/token/', { // URL actualizada
+      const response = await fetch(`${SERVER_URL}/token/pair/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-  
+
         // Guardar tokens y estado de superusuario
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
-  
+
         // Llamar a la función de login en el contexto
         login(data.access, data.isSuperUser);
-  
+
         setUsername('');
         setPassword('');
         setError(null);
         setShowError(false);
-  
+
         setTimeout(() => {
           setIsLoading(false);
           navigate('/');
@@ -125,7 +128,7 @@ const LoginRegister = () => {
       setShowError(true);
       setIsLoading(false);
     }
-  };  
+  };
 
   useEffect(() => {
     if (showError) {

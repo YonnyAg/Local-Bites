@@ -1,52 +1,87 @@
-from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
-from rest_framework import status
-from rest_framework.decorators import api_view, parser_classes, permission_classes
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Restaurante, FoodType, ContactMessage, Profile as Profile_user_model, Comment, Restaurante, TrafficRecord
-from .serializers import RestauranteSerializer, FoodTypeSerializer, SocialMedia, SocialMediaSerializer, CommentSerializer
+#Python libraries
+import json
 import requests
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+# -----------------------------------
+
+#Third party libraries
 from django.conf import settings
 from django.contrib.auth import authenticate
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.parsers import MultiPartParser, FormParser
-import json
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now, timedelta
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from rest_framework import status
+from rest_framework.decorators import (api_view, parser_classes,
+                                       permission_classes)
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+# -----------------------------------
+
+#Internal project libraries
+from .models import Comment, ContactMessage, FoodType
+from .models import Restaurante, TrafficRecord, Comment, Profile
+from .serializers import (CommentSerializer, FoodTypeSerializer,
+                          RestauranteSerializer, SocialMedia,
+                          SocialMediaSerializer)
+# -----------------------------------
 
 def csrf_token_view(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
 
+import logging
+logger = logging.getLogger('django')
+
 @api_view(['POST'])
 def register_user(request):
-    # Obtener los datos del request
-    username = request.data.get('username')
-    password = request.data.get('password')
-    email = request.data.get('email')
+    try:
+        # Validar datos antes de crear usuario
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
 
-    # Verificar que el email no exista ya
-    if User.objects.filter(email=email).exists():
-        return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+        print("Datos recibidos:", request.data)
 
-    # Crear el usuario
-    user = User.objects.create(
-        username=email,
-        first_name=username,
-        password=make_password(password),  # Hashea la contraseña
-        email=email
-    )
+        if not username:
+            return Response({"error": "El nombre de usuario es obligatorio"}, status=status.HTTP_400_BAD_REQUEST)
+        if not email:
+            return Response({"error": "El email es obligatorio"}, status=status.HTTP_400_BAD_REQUEST)
+        if not password:
+            return Response({"error": "La contraseña es obligatoria"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Crear el perfil del usuario
-    Profile_user_model.objects.create(user=user)
+        if User.objects.filter(email=email).exists():
+            return Response({"error": "El email ya está registrado"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Retornar una respuesta exitosa
-    return Response({"message": "User and profile created successfully"}, status=status.HTTP_201_CREATED)
+        # Crear usuario
+        user = User.objects.create(
+            username=email,  # Usando email como username
+            first_name=username,
+            password=make_password(password),
+            email=email
+        )
+
+        # Verificar si ya existe un perfil
+        if not Profile.objects.filter(user=user).exists():
+            Profile.objects.create(user=user)
+            print("Perfil creado para usuario:", user)
+        else:
+            print("El usuario ya tiene un perfil asignado.")
+
+        return Response({"message": "Usuario creado correctamente"}, status=status.HTTP_201_CREATED)
+
+    except Exception as e:
+        print(f"Error durante el registro: {e}")
+        return Response({"error": "Error interno del servidor"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(['POST'])
 def login_view(request):
@@ -66,10 +101,6 @@ def login_view(request):
     return Response({'error': 'Credenciales inválidas'}, status=401)
 
 #PROFILE LOGIN
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from .models import Profile, Comment
-
 @api_view(['GET'])
 def user_profile(request):
     if not request.user.is_authenticated:
@@ -172,10 +203,6 @@ def google_reviews(request, restaurante_id):
     data = response.json()
     return JsonResponse(data)
 
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-
 @api_view(['GET'])
 def comments_by_restaurant(request, restaurant_id):
     try:
@@ -197,13 +224,6 @@ def comments_by_restaurant(request, restaurant_id):
         return Response(data, status=200)
     except Restaurante.DoesNotExist:
         return Response({"error": "Restaurant not found"}, status=404)
-
-
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import RestauranteSerializer
 
 @api_view(['POST'])
 def add_restaurant(request):
@@ -256,10 +276,6 @@ class RestauranteDetail(APIView):
             return Response(response_data, status=status.HTTP_200_OK)
         except Restaurante.DoesNotExist:
             return Response({"error": "Restaurante no encontrado"}, status=status.HTTP_404_NOT_FOUND)
-
-        
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -330,19 +346,21 @@ def contact_message_view(request, id=None):
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
-# ANALYTICS
-from django.utils.timezone import now, timedelta
+# VIEWS FOR ANALYTICS
+#traffic urls
 from django.db.models import Count
+from django.http import JsonResponse
+from django.utils.timezone import now
+from datetime import timedelta
 @csrf_exempt
-def traffic_analysis(request):
+def traffic_analytics(request):
     if request.method == 'POST':
         # Registrar nuevos datos
         data = json.loads(request.body)
         url = data.get('url')
         user_agent = data.get('user_agent')
-
-        # Guardar el registro en la base de datos
-        TrafficRecord.objects.create(url=url, user_agent=user_agent)
+        if url:  # Evitar guardar URLs vacías
+            TrafficRecord.objects.create(url=url, user_agent=user_agent)
 
         return JsonResponse({"message": "Log registrado exitosamente"}, status=201)
 
@@ -351,17 +369,28 @@ def traffic_analysis(request):
         today = now().date()
         last_week = today - timedelta(days=7)
 
-        # Agrupar visitas por día y URL
+        # Agrupar visitas por día y URL, excluyendo URLs vacías
         daily_traffic = (
             TrafficRecord.objects.filter(timestamp__date__gte=last_week)
+            .exclude(url__isnull=True)
+            .exclude(url__exact="")
             .extra({"day": "date(timestamp)"})
             .values("day", "url")
             .annotate(visits=Count("id"))
             .order_by("day", "-visits")
         )
 
+        # Agrupar visitas totales por URL, excluyendo URLs vacías
+        total_traffic = (
+            TrafficRecord.objects.exclude(url__isnull=True)
+            .exclude(url__exact="")
+            .values("url")
+            .annotate(total_visits=Count("id"))
+            .order_by("-total_visits")
+        )
+
         # Añadir nombres amigables a las URLs
-        formatted_data = []
+        formatted_daily_data = []
         for record in daily_traffic:
             url = record["url"]
             day = record["day"]
@@ -371,29 +400,48 @@ def traffic_analysis(request):
             traffic_record = TrafficRecord(url=url)
             friendly_name = traffic_record.get_friendly_name()
 
-            formatted_data.append({
-                "day": day,
-                "url": url,
-                "friendly_name": friendly_name,
-                "visits": visits,
-            })
+            if friendly_name:  # Solo incluir si tiene nombre amigable
+                formatted_daily_data.append({
+                    "day": day,
+                    "url": url,
+                    "friendly_name": friendly_name,
+                    "visits": visits,
+                })
 
-        return JsonResponse(formatted_data, safe=False)
+        # Formatear los datos totales
+        formatted_total_data = []
+        for record in total_traffic:
+            url = record["url"]
+            visits = record["total_visits"]
+
+            # Crear un objeto temporal para usar get_friendly_name
+            traffic_record = TrafficRecord(url=url)
+            friendly_name = traffic_record.get_friendly_name()
+
+            if friendly_name:  # Solo incluir si tiene nombre amigable
+                formatted_total_data.append({
+                    "url": url,
+                    "friendly_name": friendly_name,
+                    "total_visits": visits,
+                })
+
+        # Combinar los datos en una respuesta
+        response_data = {
+            "daily_traffic": formatted_daily_data,
+            "total_traffic": formatted_total_data,
+        }
+
+        return JsonResponse(response_data, safe=False)
 
     else:
         return JsonResponse({"error": "Método no permitido"}, status=405)
 
-from django.contrib.auth.models import User
-from django.http import JsonResponse
-from django.utils.timezone import now, timedelta
 
-from django.contrib.auth.models import User
-from django.utils.timezone import now, timedelta
 
+#user analytics registers
 def user_analytics(request):
     today = now().date()
     last_week = today - timedelta(days=6)
-
     # Usuarios registrados por día en la última semana
     weekly_data = []
     for i in range(7):
