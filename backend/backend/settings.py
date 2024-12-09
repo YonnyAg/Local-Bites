@@ -162,6 +162,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "https://local-bites-sepia.vercel.app", # Dominio del frontend 
     "http://localhost:5173",
+    "https://localbites.cl/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -169,9 +170,10 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "https://local-bites-sepia.vercel.app",  # Tu dominio de producción
     "http://localhost:5173",  # Frontend local
+    "https://localbites.cl/"
 ]
 
-LOGIN_URL = 'http://localhost:5173/login'
+LOGIN_URL = 'https://localbites.cl/login'
 
 
 MEDIA_URL = '/media/'  # URL base para acceder a archivos multimedia
