@@ -14,6 +14,7 @@ const Restaurante = ({ selectedCategory, onClearFilters, onDataLoaded }) => {
       const response = await fetch('https://local-bites-backend.onrender.com/api/restaurantes/');
       const data = await response.json();
       setRestaurantes(data);
+      console.log("Restaurantes:", restaurantes);
       if (onDataLoaded) onDataLoaded(); // Notifica que los datos están listos
     } catch (error) {
       console.error('Error fetching restaurantes:', error);
@@ -94,7 +95,7 @@ const Restaurante = ({ selectedCategory, onClearFilters, onDataLoaded }) => {
           >
             <div className="flex items-center space-x-4">
               <img
-                src={restaurante.image ? `${BASE_URL}${restaurante.image}` : sushiLogo}
+                src={restaurante.image || sushiLogo}
                 alt={restaurante.name}
                 className="restaurant-logo w-12 h-12 rounded-full"
               />

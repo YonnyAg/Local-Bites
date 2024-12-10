@@ -24,6 +24,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from cloudinary.uploader import upload
 # -----------------------------------
 
 #Internal project libraries
@@ -152,11 +154,6 @@ def user_comments(request):
             return Response(CommentSerializer(new_comment).data, status=201)
         except Restaurante.DoesNotExist:
             return Response({'error': 'Restaurant not found'}, status=404)
-
-from cloudinary.uploader import upload
-from rest_framework.decorators import api_view, parser_classes
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
 
 @api_view(['PUT'])
 @parser_classes([MultiPartParser, FormParser])  # Permitir archivos y datos de formulario

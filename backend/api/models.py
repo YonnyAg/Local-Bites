@@ -24,7 +24,14 @@ class Restaurante(models.Model):
     phone = models.CharField(max_length=15, verbose_name="Phone", null=True, blank=True)
     exact_location = models.CharField(max_length=200, verbose_name="Exact Location", null=True, blank=True)
     place_id = models.CharField(max_length=100, verbose_name="Google Place ID", unique=True, null=True, blank=True)
-    image = models.ImageField(upload_to='restaurant_images/', verbose_name="Image", null=True, blank=True)  # Nuevo campo para imágenes
+
+    # Cambiar ImageField por CloudinaryField
+    image = CloudinaryField(
+        "Image", 
+        null=True, 
+        blank=True, 
+        folder="restaurant_images/"
+    )
 
     def __str__(self):
         return self.name

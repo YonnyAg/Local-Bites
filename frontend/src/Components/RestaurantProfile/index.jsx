@@ -11,13 +11,13 @@ const ProfilePage = () => {
   const { id } = useParams(); // Obtiene el ID del restaurante desde la URL
   const [restaurantInfo, setRestaurantInfo] = useState(null);
   const [loading, setLoading] = useState(true); // Estado para el loader
-  const BASE_URL = "https://local-bites-backend.onrender.com"; // Define la URL base del backend
+  const BASE_URL = "http://127.0.0.1:8000"; // Define la URL base del backend
 
   // Llama a la API para obtener los datos del restaurante
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch(`https://local-bites-backend.onrender.com/api/restaurantes/${id}/`);
+        const response = await fetch(`http://127.0.0.1:8000/api/restaurantes/${id}/`);
         const data = await response.json();
         setRestaurantInfo(data);
       } catch (error) {
@@ -39,7 +39,8 @@ const ProfilePage = () => {
   return (
     <div className="relative w-full">
       {/* Banner */}
-      <Banner name={restaurantInfo.name} image={`${BASE_URL}${restaurantInfo.image}`} />
+      <Banner name={restaurantInfo.name} image={restaurantInfo.image} />
+      
 
       {/* Contenedor principal */}
       <div className="w-full flex flex-col lg:flex-row gap-6 px-4">
@@ -59,7 +60,12 @@ const ProfilePage = () => {
 
       {/* Botón flotante de WhatsApp */}
       <a
-        href={restaurantInfo?.whatsapp || '#'}
+        href={
+          restaurantInfo?.social_media?.[0]?.whatsapp 
+            ? restaurantInfo.social_media[0].whatsapp 
+            : '#'
+        }
+        target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition duration-300 flex items-center space-x-2"
       >
