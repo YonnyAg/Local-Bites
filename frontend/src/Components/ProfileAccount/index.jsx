@@ -10,7 +10,7 @@ const UserAccount = () => {
   const [newProfilePicture, setNewProfilePicture] = useState(null); // Nueva imagen de perfil
 
   // Variable de entorno para la URL base del servidor
-  const SERVER_URL = 'http://127.0.0.1:8000/api';
+  const SERVER_URL = 'https://local-bites-backend.onrender.com/api';
 
   // Función para refrescar el token de acceso
   const refreshAccessToken = async () => {

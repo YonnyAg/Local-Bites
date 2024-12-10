@@ -11,13 +11,13 @@ const ProfilePage = () => {
   const { id } = useParams(); // Obtiene el ID del restaurante desde la URL
   const [restaurantInfo, setRestaurantInfo] = useState(null);
   const [loading, setLoading] = useState(true); // Estado para el loader
-  const BASE_URL = "http://127.0.0.1:8000"; // Define la URL base del backend
+  const BASE_URL = "https://local-bites-backend.onrender.com/"; // Define la URL base del backend
 
   // Llama a la API para obtener los datos del restaurante
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/restaurantes/${id}/`);
+        const response = await fetch(`https://local-bites-backend.onrender.com/api/restaurantes/${id}/`);
         const data = await response.json();
         setRestaurantInfo(data);
       } catch (error) {
