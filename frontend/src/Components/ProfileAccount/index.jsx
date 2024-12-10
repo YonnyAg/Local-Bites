@@ -9,13 +9,15 @@ const UserAccount = () => {
   const [newUsername, setNewUsername] = useState(""); // Nuevo nombre de usuario
   const [newProfilePicture, setNewProfilePicture] = useState(null); // Nueva imagen de perfil
 
+  // Variable de entorno para la URL base del servidor
+  const SERVER_URL = 'http://127.0.0.1:8000/api';
+
   // Función para refrescar el token de acceso
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
-
     if (refreshToken) {
       try {
-        const response = await fetch("https://local-bites-backend.onrender.com/api/token/refresh/", {
+        const response = await fetch(`${SERVER_URL}/token/refresh/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -43,7 +45,7 @@ const UserAccount = () => {
     try {
       let token = localStorage.getItem("accessToken");
 
-      let response = await fetch("https://local-bites-backend.onrender.com/api/api/profile/", {
+      let response = await fetch(`${SERVER_URL}/profile/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,7 +56,7 @@ const UserAccount = () => {
       if (response.status === 401) {
         token = await refreshAccessToken();
         if (token) {
-          response = await fetch("https://local-bites-backend.onrender.com/api/api/profile/", {
+          response = await fetch(`${SERVER_URL}/profile/`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -89,7 +91,7 @@ const UserAccount = () => {
         formData.append("profilePicture", newProfilePicture);
       }
   
-      const response = await fetch("https://local-bites-backend.onrender.com/api/api/profile/update/", {
+      const response = await fetch(`${SERVER_URL}/profile/update/`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`, // Autorización con el token de acceso

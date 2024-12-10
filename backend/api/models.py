@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from cloudinary.models import CloudinaryField
 
 # Create your models here.
 class FoodType(models.Model):
@@ -77,15 +78,17 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="profile"
     )
-    profile_picture = models.ImageField(
-        upload_to="profile_pictures/",
+    profile_picture = models.URLField(
+        max_length=500,  # Longitud suficiente para URLs de Cloudinary
         null=True,
         blank=True,
+        default="https://res.cloudinary.com/dka3j5hvp/image/upload/v1/media/profile_pictures/default-profile.png",
         verbose_name="Profile Picture"
     )
 
     def __str__(self):
         return f"Profile of {self.user.username}"
+
 
 def validate_rating(value):
     """Valida que la calificación esté entre 1 y 5."""

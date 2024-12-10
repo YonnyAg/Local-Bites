@@ -108,7 +108,7 @@ def user_profile(request):
 
     user = request.user
     profile = Profile.objects.get(user=user)
-    profile_picture = profile.profile_picture.url if profile.profile_picture else None
+    profile_picture = profile.profile_picture if profile.profile_picture else None
 
     comments = Comment.objects.filter(user=user).select_related('restaurant')
     comments_data = [
@@ -153,7 +153,10 @@ def user_comments(request):
         except Restaurante.DoesNotExist:
             return Response({'error': 'Restaurant not found'}, status=404)
 
-
+from cloudinary.uploader import upload
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
 
 @api_view(['PUT'])
 @parser_classes([MultiPartParser, FormParser])  # Permitir archivos y datos de formulario
@@ -173,18 +176,22 @@ def update_profile(request):
     # Actualizar imagen de perfil
     profile_picture = request.FILES.get('profilePicture')
     if profile_picture:
-        profile.profile_picture = profile_picture
-        profile.save()
+        # Subir la imagen a Cloudinary
+        try:
+            upload_result = upload(profile_picture, folder="profile_pictures/")
+            profile.profile_picture = upload_result.get("secure_url")  # Guardar la URL
+            profile.save()
+        except Exception as e:
+            return Response({"error": f"Error uploading to Cloudinary: {str(e)}"}, status=500)
 
     # Retornar los datos actualizados
     profile_data = {
         "username": user.first_name,
         "email": user.email,
-        "profilePicture": profile.profile_picture.url if profile.profile_picture else None,
+        "profilePicture": profile.profile_picture,  # Devolvemos la URL de la imagen
     }
 
     return Response(profile_data, status=200)
-
 
 def google_reviews(request, restaurante_id):
     # Busca el restaurante por su ID
